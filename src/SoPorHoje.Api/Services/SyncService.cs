@@ -129,6 +129,6 @@ public class SyncService(AppDbContext db, ILogger<SyncService> logger)
 
         db.Users.Remove(user);
         await db.SaveChangesAsync(ct);
-        logger.LogInformation("Usuário {DeviceId} removido permanentemente", deviceId);
+        logger.LogInformation("Usuário removido permanentemente");
     }
 }

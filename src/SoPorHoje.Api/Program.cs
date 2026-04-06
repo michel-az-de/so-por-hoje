@@ -86,7 +86,11 @@ using (var scope = app.Services.CreateScope())
         await db.Database.MigrateAsync();
         logger.LogInformation("Migrations aplicadas com sucesso");
 
-        var reflectionsPath = Path.Combine(app.Environment.ContentRootPath, "data", "daily_reflections_pt-br.json");
+        // Resolve data path: configurable, then alongside the executable, then ContentRoot
+        var configPath = app.Configuration["ReflectionsDataPath"];
+        var reflectionsPath = !string.IsNullOrWhiteSpace(configPath)
+            ? configPath
+            : FindDataFile("daily_reflections_pt-br.json", app.Environment.ContentRootPath);
         await ReflectionSeeder.SeedAsync(db, reflectionsPath, logger);
     }
     catch (Exception ex)
@@ -98,4 +102,22 @@ using (var scope = app.Services.CreateScope())
 app.Run();
 
 // Tornar Program acessível para testes de integração
-public partial class Program { }
+public partial class Program
+{
+    /// <summary>
+    /// Procura o arquivo de dados em vários locais possíveis:
+    /// 1. {contentRoot}/data/{fileName}
+    /// 2. {executableDir}/data/{fileName}
+    /// 3. {currentDir}/data/{fileName}
+    /// </summary>
+    private static string FindDataFile(string fileName, string contentRoot)
+    {
+        string[] candidates =
+        [
+            Path.Combine(contentRoot, "data", fileName),
+            Path.Combine(AppContext.BaseDirectory, "data", fileName),
+            Path.Combine(Directory.GetCurrentDirectory(), "data", fileName),
+        ];
+        return Array.Find(candidates, File.Exists) ?? candidates[0];
+    }
+}
