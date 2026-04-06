@@ -152,8 +152,6 @@ public class SyncEngine : ISyncService
         var db = await _database.GetConnectionAsync();
         var dtos = response.Content;
 
-        // Clear and replace strategy for meetings (server is source of truth)
-        await db.DeleteAllAsync<OnlineMeeting>();
         var meetings = dtos.Select(dto => new OnlineMeeting
         {
             GroupName = dto.GroupName,
@@ -166,7 +164,12 @@ public class SyncEngine : ISyncService
             LastScrapedAt = dto.LastScrapedAt,
         }).ToList();
 
-        await db.InsertAllAsync(meetings);
+        // Wrap delete+insert in a transaction to prevent data loss on failure
+        await db.RunInTransactionAsync(conn =>
+        {
+            conn.DeleteAll<OnlineMeeting>();
+            conn.InsertAll(meetings);
+        });
         _logger.LogInformation("Pulled and replaced {Count} meetings", meetings.Count);
     }
 

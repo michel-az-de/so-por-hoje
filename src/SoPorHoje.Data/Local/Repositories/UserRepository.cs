@@ -78,11 +78,15 @@ public class UserRepository : IUserRepository
                 OccurredAt = DateTime.UtcNow,
             };
 
-            await db.InsertAsync(resetEvent);
-
             profile.SobrietyDate = newDate;
             profile.UpdatedAt = DateTime.UtcNow;
-            await db.UpdateAsync(profile);
+
+            // Wrap in a transaction so reset event and profile update are atomic
+            await db.RunInTransactionAsync(conn =>
+            {
+                conn.Insert(resetEvent);
+                conn.Update(profile);
+            });
 
             _logger.LogInformation("Sobriety reset. Previous date: {Previous}, New date: {New}",
                 resetEvent.PreviousSobrietyDate, newDate);
