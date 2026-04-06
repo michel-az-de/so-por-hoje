@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:SoPorHoje.App.Converters"
+             x:Class="SoPorHoje.App.Controls.AccordionItem"
+             x:Name="accordionRoot">
+
+    <ContentView.Resources>
+        <converters:BoolToRotationConverter x:Key="BoolToRotation" />
+        <converters:BoolToAccentConverter x:Key="BoolToAccent" />
+        <converters:BoolToNumberTextColorConverter x:Key="BoolToNumberText" />
+    </ContentView.Resources>
+
+    <Frame Style="{StaticResource CardFrame}"
+           Margin="0,0,0,8"
+           SemanticProperties.Description="{Binding Source={x:Reference accordionRoot}, Path=AccessibilityDescription}">
+
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnTapped"
+                                  SemanticProperties.Description="Toque para expandir ou recolher" />
+        </Frame.GestureRecognizers>
+
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Header row -->
+            <Grid ColumnDefinitions="Auto,*,Auto"
+                  ColumnSpacing="12"
+                  MinimumHeightRequest="44">
+
+                <!-- Número circular -->
+                <Frame Grid.Column="0"
+                       WidthRequest="32" HeightRequest="32"
+                       CornerRadius="16"
+                       Padding="0"
+                       IsClippedToBounds="True"
+                       BackgroundColor="{Binding Source={x:Reference accordionRoot}, Path=IsExpanded, Converter={StaticResource BoolToAccent}}"
+                       BorderColor="Transparent"
+                       HasShadow="False"
+                       VerticalOptions="Center"
+                       SemanticProperties.IsHeadingLevel="None">
+                    <Label Text="{Binding Source={x:Reference accordionRoot}, Path=Number}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           FontFamily="DMSans"
+                           FontAttributes="Bold"
+                           FontSize="14"
+                           TextColor="{Binding Source={x:Reference accordionRoot}, Path=IsExpanded, Converter={StaticResource BoolToNumberText}}"
+                           SemanticProperties.Description="" />
+                </Frame>
+
+                <!-- Título -->
+                <Label Grid.Column="1"
+                       Text="{Binding Source={x:Reference accordionRoot}, Path=Title}"
+                       Style="{StaticResource BodyText}"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       SemanticProperties.HeadingLevel="Level3" />
+
+                <!-- Chevron -->
+                <Label Grid.Column="2"
+                       Text="▾"
+                       FontSize="16"
+                       TextColor="{StaticResource TextMuted}"
+                       VerticalOptions="Center"
+                       Rotation="{Binding Source={x:Reference accordionRoot}, Path=IsExpanded, Converter={StaticResource BoolToRotation}}"
+                       SemanticProperties.Description="" />
+            </Grid>
+
+            <!-- Corpo expansível -->
+            <Label Text="{Binding Source={x:Reference accordionRoot}, Path=Body}"
+                   IsVisible="{Binding Source={x:Reference accordionRoot}, Path=IsExpanded}"
+                   Style="{StaticResource SerifText}"
+                   FontAttributes="Italic"
+                   Margin="44,12,0,4"
+                   SemanticProperties.Description="{Binding Source={x:Reference accordionRoot}, Path=Body}" />
+
+        </VerticalStackLayout>
+    </Frame>
+
+</ContentView>

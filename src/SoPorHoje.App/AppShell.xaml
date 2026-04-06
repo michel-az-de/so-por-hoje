@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:SoPorHoje.App.Views"
+       x:Class="SoPorHoje.App.AppShell"
+       Shell.NavBarHasShadow="True"
+       Shell.TabBarBackgroundColor="{StaticResource BgSurface}"
+       Shell.TabBarTitleColor="{StaticResource Accent}"
+       Shell.TabBarUnselectedColor="{StaticResource TextMuted}"
+       Shell.BackgroundColor="{StaticResource BgSurface}"
+       SemanticProperties.Description="Aplicativo Só Por Hoje">
+
+    <TabBar>
+        <!-- Tab Reuniões -->
+        <ShellContent Title="Reuniões"
+                      Icon="tab_meetings.png"
+                      ContentTemplate="{DataTemplate views:MeetingsPage}"
+                      Route="meetings"
+                      SemanticProperties.Description="Tab de Reuniões Online" />
+
+        <!-- Tab Programa -->
+        <ShellContent Title="Programa"
+                      Icon="tab_program.png"
+                      ContentTemplate="{DataTemplate views:ProgramPage}"
+                      Route="program"
+                      SemanticProperties.Description="Tab do Programa de A.A." />
+    </TabBar>
+
+</Shell>

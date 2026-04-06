@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             xmlns:converters="clr-namespace:SoPorHoje.App.Converters"
+             x:Class="SoPorHoje.App.Views.MeetingsPage"
+             x:DataType="vm:MeetingsViewModel"
+             Title="Reuniões"
+             BackgroundColor="{StaticResource BgPrimary}"
+             SemanticProperties.Description="Tela de Reuniões Online de AA">
+
+    <ContentPage.Resources>
+        <converters:LiveToBackgroundConverter x:Key="LiveToBackground" />
+        <converters:LiveToBorderConverter x:Key="LiveToBorder" />
+        <converters:LiveToButtonTextConverter x:Key="LiveToButtonText" />
+        <converters:LiveToButtonColorConverter x:Key="LiveToButtonColor" />
+        <converters:LiveToAccessibilityConverter x:Key="LiveToAccessibility" />
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
+
+    <RefreshView Command="{Binding RefreshCommand}"
+                 IsRefreshing="{Binding IsRefreshing}"
+                 RefreshColor="{StaticResource Accent}">
+
+        <ScrollView Style="{StaticResource PageScrollView}">
+            <VerticalStackLayout Padding="16,12,16,32" Spacing="0">
+
+                <!-- ══ Header ════════════════════════════════════════════ -->
+                <Label Text="Reuniões Online"
+                       Style="{StaticResource PageTitle}"
+                       Margin="0,4,0,4"
+                       SemanticProperties.HeadingLevel="Level1"
+                       SemanticProperties.Description="Reuniões Online de AA" />
+
+                <HorizontalStackLayout Spacing="4" Margin="0,0,0,16">
+                    <Label Text="Todas em"
+                           Style="{StaticResource MutedText}" />
+                    <Label Text="intergrupos-aa.org.br →"
+                           Style="{StaticResource LinkLabel}"
+                           SemanticProperties.Description="Abrir site de intergrupos A.A.">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding OpenLinkCommand}"
+                                CommandParameter="https://www.aa.org.br" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+
+                <!-- ══ Lista de reuniões ════════════════════════════════ -->
+                <CollectionView ItemsSource="{Binding Meetings}"
+                                SelectionMode="None"
+                                SemanticProperties.Description="Lista de reuniões online"
+                                IsVisible="{Binding HasAnyMeetings}">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:MeetingDisplayItem">
+
+                            <Frame BackgroundColor="{Binding IsLive, Converter={StaticResource LiveToBackground}}"
+                                   BorderColor="{Binding IsLive, Converter={StaticResource LiveToBorder}}"
+                                   CornerRadius="12"
+                                   Padding="16"
+                                   HasShadow="True"
+                                   Margin="0,0,0,8"
+                                   SemanticProperties.Description="{Binding Meeting.GroupName, StringFormat='Reunião {0}'}">
+
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      ColumnSpacing="12"
+                                      MinimumHeightRequest="44">
+
+                                    <!-- Bolinha verde pulsante (visível apenas ao vivo) -->
+                                    <Ellipse Grid.Column="0"
+                                             IsVisible="{Binding IsLive}"
+                                             WidthRequest="10" HeightRequest="10"
+                                             Fill="{StaticResource Success}"
+                                             VerticalOptions="Center"
+                                             SemanticProperties.Description="Ao vivo agora" />
+
+                                    <!-- Info da reunião -->
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding Meeting.GroupName}"
+                                               Style="{StaticResource BodyText}"
+                                               FontAttributes="Bold"
+                                               SemanticProperties.HeadingLevel="Level3" />
+                                        <Label Style="{StaticResource MutedText}"
+                                               SemanticProperties.Description="{Binding DaysLabel}">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="{}{0} · {1}">
+                                                    <Binding Path="DaysLabel" />
+                                                    <Binding Path="TimeLabel" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </VerticalStackLayout>
+
+                                    <!-- Botão Entrar / AO VIVO -->
+                                    <Button Grid.Column="2"
+                                            Text="{Binding IsLive, Converter={StaticResource LiveToButtonText}}"
+                                            BackgroundColor="{Binding IsLive, Converter={StaticResource LiveToButtonColor}}"
+                                            TextColor="White"
+                                            FontFamily="DMSans"
+                                            FontSize="13"
+                                            FontAttributes="Bold"
+                                            CornerRadius="8"
+                                            Padding="12,8"
+                                            HeightRequest="44"
+                                            MinimumWidthRequest="80"
+                                            VerticalOptions="Center"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MeetingsViewModel}}, Path=JoinMeetingCommand}"
+                                            CommandParameter="{Binding .}"
+                                            SemanticProperties.Description="{Binding IsLive, Converter={StaticResource LiveToAccessibility}}" />
+                                </Grid>
+                            </Frame>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Estado vazio -->
+                <VerticalStackLayout IsVisible="{Binding HasAnyMeetings, Converter={StaticResource InverseBoolConverter}}"
+                                     HorizontalOptions="Center"
+                                     Margin="0,32,0,0"
+                                     Spacing="8">
+                    <Label Text="🤝" FontSize="48" HorizontalOptions="Center" SemanticProperties.Description="" />
+                    <Label Text="Nenhuma reunião encontrada."
+                           Style="{StaticResource MutedText}"
+                           HorizontalOptions="Center"
+                           SemanticProperties.Description="Nenhuma reunião encontrada." />
+                    <Button Text="Tentar novamente"
+                            Style="{StaticResource OutlineButton}"
+                            Command="{Binding LoadMeetingsCommand}"
+                            HorizontalOptions="Center"
+                            SemanticProperties.Description="Recarregar lista de reuniões" />
+                </VerticalStackLayout>
+
+                <!-- ══ Links Úteis ════════════════════════════════════ -->
+                <Label Text="Links Úteis"
+                       Style="{StaticResource SectionLabel}"
+                       Margin="0,28,0,12"
+                       SemanticProperties.HeadingLevel="Level2"
+                       SemanticProperties.Description="Seção de Links Úteis" />
+
+                <Frame Style="{StaticResource CardFrame}" Padding="8">
+                    <VerticalStackLayout Spacing="0">
+
+                        <Grid ColumnDefinitions="Auto,*"
+                              ColumnSpacing="12"
+                              Padding="8"
+                              MinimumHeightRequest="44">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenLinkCommand}"
+                                                      CommandParameter="https://www.aa.org.br" />
+                            </Grid.GestureRecognizers>
+                            <Label Text="🌐" FontSize="18" VerticalOptions="Center" SemanticProperties.Description="" />
+                            <Label Grid.Column="1"
+                                   Text="A.A. Brasil"
+                                   Style="{StaticResource BodyText}"
+                                   VerticalOptions="Center"
+                                   SemanticProperties.Description="Abrir site A.A. Brasil" />
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="{StaticResource BorderLight}" Margin="8,0" />
+
+                        <Grid ColumnDefinitions="Auto,*"
+                              ColumnSpacing="12"
+                              Padding="8"
+                              MinimumHeightRequest="44">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenLinkCommand}"
+                                                      CommandParameter="https://www.al-anon.org.br" />
+                            </Grid.GestureRecognizers>
+                            <Label Text="👨‍👩‍👧" FontSize="18" VerticalOptions="Center" SemanticProperties.Description="" />
+                            <Label Grid.Column="1"
+                                   Text="Al-Anon"
+                                   Style="{StaticResource BodyText}"
+                                   VerticalOptions="Center"
+                                   SemanticProperties.Description="Abrir site Al-Anon" />
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="{StaticResource BorderLight}" Margin="8,0" />
+
+                        <Grid ColumnDefinitions="Auto,*"
+                              ColumnSpacing="12"
+                              Padding="8"
+                              MinimumHeightRequest="44">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenLinkCommand}"
+                                                      CommandParameter="https://www.cvv.org.br" />
+                            </Grid.GestureRecognizers>
+                            <Label Text="☎️" FontSize="18" VerticalOptions="Center" SemanticProperties.Description="" />
+                            <Label Grid.Column="1"
+                                   Text="CVV — Ligue 188"
+                                   Style="{StaticResource BodyText}"
+                                   VerticalOptions="Center"
+                                   SemanticProperties.Description="Abrir site CVV, Centro de Valorização da Vida, ligue 188" />
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="{StaticResource BorderLight}" Margin="8,0" />
+
+                        <Grid ColumnDefinitions="Auto,*"
+                              ColumnSpacing="12"
+                              Padding="8"
+                              MinimumHeightRequest="44">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenLinkCommand}"
+                                                      CommandParameter="https://www.aa.org.br/encontre-aa/" />
+                            </Grid.GestureRecognizers>
+                            <Label Text="📍" FontSize="18" VerticalOptions="Center" SemanticProperties.Description="" />
+                            <Label Grid.Column="1"
+                                   Text="Encontre Grupo Presencial"
+                                   Style="{StaticResource BodyText}"
+                                   VerticalOptions="Center"
+                                   SemanticProperties.Description="Encontrar grupo de A.A. presencial próximo a você" />
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>
