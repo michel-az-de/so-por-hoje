@@ -118,20 +118,15 @@ public class SyncEngine : ISyncService
 
         // Mark as synced
         foreach (var pledge in pledges)
-        {
             pledge.IsSynced = true;
-            await db.UpdateAsync(pledge);
-        }
         foreach (var evt in chipEvents)
-        {
             evt.IsSynced = true;
-            await db.UpdateAsync(evt);
-        }
         foreach (var evt in resetEvents)
-        {
             evt.IsSynced = true;
-            await db.UpdateAsync(evt);
-        }
+
+        await db.UpdateAllAsync(pledges);
+        await db.UpdateAllAsync(chipEvents);
+        await db.UpdateAllAsync(resetEvents);
 
         _logger.LogInformation("Pushed {Pledges} pledges, {Chips} chip events, {Resets} reset events",
             pledges.Count, chipEvents.Count, resetEvents.Count);
@@ -187,15 +182,25 @@ public class SyncEngine : ISyncService
         var db = await _database.GetConnectionAsync();
         var dtos = response.Content;
 
+        var existingByKey = (await db.Table<DailyReflection>().ToListAsync())
+            .ToDictionary(r => r.DateKey);
+
+        var toInsert = new List<DailyReflection>();
+        var toUpdate = new List<DailyReflection>();
+
         foreach (var dto in dtos)
         {
-            var existing = await db.Table<DailyReflection>()
-                .Where(r => r.DateKey == dto.DateKey)
-                .FirstOrDefaultAsync();
-
-            if (existing == null)
+            if (existingByKey.TryGetValue(dto.DateKey, out var existing))
             {
-                await db.InsertAsync(new DailyReflection
+                existing.Title = dto.Title;
+                existing.Quote = dto.Quote;
+                existing.Text = dto.Text;
+                existing.Reference = dto.Reference;
+                toUpdate.Add(existing);
+            }
+            else
+            {
+                toInsert.Add(new DailyReflection
                 {
                     DateKey = dto.DateKey,
                     Title = dto.Title,
@@ -204,15 +209,12 @@ public class SyncEngine : ISyncService
                     Reference = dto.Reference,
                 });
             }
-            else
-            {
-                existing.Title = dto.Title;
-                existing.Quote = dto.Quote;
-                existing.Text = dto.Text;
-                existing.Reference = dto.Reference;
-                await db.UpdateAsync(existing);
-            }
         }
+
+        if (toInsert.Count > 0)
+            await db.InsertAllAsync(toInsert);
+        if (toUpdate.Count > 0)
+            await db.UpdateAllAsync(toUpdate);
 
         _logger.LogInformation("Pulled and upserted {Count} reflections", dtos.Count);
     }

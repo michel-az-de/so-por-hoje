@@ -61,7 +61,7 @@ public class ReflectionRepository : IReflectionRepository
 
             var reflections = entries.Select(e => new DailyReflection
             {
-                DateKey = DateTime.Parse(e.Date).ToString("MM-dd"),
+                DateKey = DateTime.ParseExact(e.Date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture).ToString("MM-dd"),
                 Title = e.Title ?? string.Empty,
                 Quote = e.Quote ?? string.Empty,
                 Text = e.Text ?? string.Empty,
