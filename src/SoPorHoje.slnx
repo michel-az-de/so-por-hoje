@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SoPorHoje.Api/SoPorHoje.Api.csproj" />
+  <Project Path="SoPorHoje.Scraper/SoPorHoje.Scraper.csproj" />
+</Solution>
