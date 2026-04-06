@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             x:Class="SoPorHoje.App.Views.HaltCheckPage"
+             x:DataType="vm:HaltCheckViewModel"
+             Title="Check HALT"
+             BackgroundColor="{StaticResource BgPrimary}"
+             SemanticProperties.Description="Ferramenta Check HALT — Fome, Raiva, Solidão, Cansaço">
+
+    <ScrollView Style="{StaticResource PageScrollView}">
+        <VerticalStackLayout Padding="16,12,16,32" Spacing="0">
+
+            <!-- Header -->
+            <Label Text="Check HALT"
+                   Style="{StaticResource PageTitle}"
+                   Margin="0,4,0,4"
+                   SemanticProperties.HeadingLevel="Level1"
+                   SemanticProperties.Description="Check HALT" />
+            <Label Text="Estou com Fome, Raiva, Solitário ou Cansado?"
+                   Style="{StaticResource MutedText}"
+                   Margin="0,0,0,24"
+                   SemanticProperties.Description="Ferramenta para verificar estado emocional e físico." />
+
+            <!-- Grid 2x2 de cards HALT -->
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="12"
+                  RowSpacing="12">
+
+                <!-- H — Fome -->
+                <Frame Grid.Row="0" Grid.Column="0"
+                       CornerRadius="16"
+                       Padding="0"
+                       HasShadow="True"
+                       BackgroundColor="{StaticResource BgSurface}"
+                       BorderColor="{StaticResource BorderLight}"
+                       SemanticProperties.Description="{Binding Items[0].AccessibilityDescription}">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHaltCardTapped"
+                                              CommandParameter="0" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="0">
+                        <!-- Cabeçalho colorido -->
+                        <Frame CornerRadius="16,16,0,0"
+                               Padding="12,12"
+                               BackgroundColor="{StaticResource HaltHunger}"
+                               BorderColor="Transparent"
+                               HasShadow="False">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding Items[0].Emoji}" FontSize="22" VerticalOptions="Center" SemanticProperties.Description="" />
+                                <Label Text="{Binding Items[0].Letter}"
+                                       FontFamily="DMSans"
+                                       FontSize="28"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.HeadingLevel="Level2" />
+                                <Label Text="{Binding Items[0].Word}"
+                                       FontFamily="DMSans"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.Description="{Binding Items[0].Word}" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                        <!-- Corpo -->
+                        <VerticalStackLayout Padding="12,10,12,12" Spacing="6">
+                            <Label Text="{Binding Items[0].Question}"
+                                   Style="{StaticResource BodyText}"
+                                   FontAttributes="Bold"
+                                   SemanticProperties.Description="{Binding Items[0].Question}" />
+                            <Label Text="{Binding Items[0].Tip}"
+                                   Style="{StaticResource MutedText}"
+                                   IsVisible="{Binding Items[0].IsExpanded}"
+                                   FontSize="13"
+                                   SemanticProperties.Description="{Binding Items[0].Tip}" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- A — Raiva -->
+                <Frame Grid.Row="0" Grid.Column="1"
+                       CornerRadius="16"
+                       Padding="0"
+                       HasShadow="True"
+                       BackgroundColor="{StaticResource BgSurface}"
+                       BorderColor="{StaticResource BorderLight}"
+                       SemanticProperties.Description="{Binding Items[1].AccessibilityDescription}">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHaltCardTapped"
+                                              CommandParameter="1" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="0">
+                        <Frame CornerRadius="16,16,0,0"
+                               Padding="12,12"
+                               BackgroundColor="{StaticResource HaltAnger}"
+                               BorderColor="Transparent"
+                               HasShadow="False">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding Items[1].Emoji}" FontSize="22" VerticalOptions="Center" SemanticProperties.Description="" />
+                                <Label Text="{Binding Items[1].Letter}"
+                                       FontFamily="DMSans"
+                                       FontSize="28"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.HeadingLevel="Level2" />
+                                <Label Text="{Binding Items[1].Word}"
+                                       FontFamily="DMSans"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.Description="{Binding Items[1].Word}" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                        <VerticalStackLayout Padding="12,10,12,12" Spacing="6">
+                            <Label Text="{Binding Items[1].Question}"
+                                   Style="{StaticResource BodyText}"
+                                   FontAttributes="Bold"
+                                   SemanticProperties.Description="{Binding Items[1].Question}" />
+                            <Label Text="{Binding Items[1].Tip}"
+                                   Style="{StaticResource MutedText}"
+                                   IsVisible="{Binding Items[1].IsExpanded}"
+                                   FontSize="13"
+                                   SemanticProperties.Description="{Binding Items[1].Tip}" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- L — Solidão -->
+                <Frame Grid.Row="1" Grid.Column="0"
+                       CornerRadius="16"
+                       Padding="0"
+                       HasShadow="True"
+                       BackgroundColor="{StaticResource BgSurface}"
+                       BorderColor="{StaticResource BorderLight}"
+                       SemanticProperties.Description="{Binding Items[2].AccessibilityDescription}">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHaltCardTapped"
+                                              CommandParameter="2" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="0">
+                        <Frame CornerRadius="16,16,0,0"
+                               Padding="12,12"
+                               BackgroundColor="{StaticResource HaltLonely}"
+                               BorderColor="Transparent"
+                               HasShadow="False">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding Items[2].Emoji}" FontSize="22" VerticalOptions="Center" SemanticProperties.Description="" />
+                                <Label Text="{Binding Items[2].Letter}"
+                                       FontFamily="DMSans"
+                                       FontSize="28"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.HeadingLevel="Level2" />
+                                <Label Text="{Binding Items[2].Word}"
+                                       FontFamily="DMSans"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.Description="{Binding Items[2].Word}" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                        <VerticalStackLayout Padding="12,10,12,12" Spacing="6">
+                            <Label Text="{Binding Items[2].Question}"
+                                   Style="{StaticResource BodyText}"
+                                   FontAttributes="Bold"
+                                   SemanticProperties.Description="{Binding Items[2].Question}" />
+                            <Label Text="{Binding Items[2].Tip}"
+                                   Style="{StaticResource MutedText}"
+                                   IsVisible="{Binding Items[2].IsExpanded}"
+                                   FontSize="13"
+                                   SemanticProperties.Description="{Binding Items[2].Tip}" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- T — Cansaço -->
+                <Frame Grid.Row="1" Grid.Column="1"
+                       CornerRadius="16"
+                       Padding="0"
+                       HasShadow="True"
+                       BackgroundColor="{StaticResource BgSurface}"
+                       BorderColor="{StaticResource BorderLight}"
+                       SemanticProperties.Description="{Binding Items[3].AccessibilityDescription}">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHaltCardTapped"
+                                              CommandParameter="3" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="0">
+                        <Frame CornerRadius="16,16,0,0"
+                               Padding="12,12"
+                               BackgroundColor="{StaticResource HaltTired}"
+                               BorderColor="Transparent"
+                               HasShadow="False">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding Items[3].Emoji}" FontSize="22" VerticalOptions="Center" SemanticProperties.Description="" />
+                                <Label Text="{Binding Items[3].Letter}"
+                                       FontFamily="DMSans"
+                                       FontSize="28"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.HeadingLevel="Level2" />
+                                <Label Text="{Binding Items[3].Word}"
+                                       FontFamily="DMSans"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       VerticalOptions="Center"
+                                       SemanticProperties.Description="{Binding Items[3].Word}" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                        <VerticalStackLayout Padding="12,10,12,12" Spacing="6">
+                            <Label Text="{Binding Items[3].Question}"
+                                   Style="{StaticResource BodyText}"
+                                   FontAttributes="Bold"
+                                   SemanticProperties.Description="{Binding Items[3].Question}" />
+                            <Label Text="{Binding Items[3].Tip}"
+                                   Style="{StaticResource MutedText}"
+                                   IsVisible="{Binding Items[3].IsExpanded}"
+                                   FontSize="13"
+                                   SemanticProperties.Description="{Binding Items[3].Tip}" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </Grid>
+
+            <!-- Nota informativa -->
+            <Frame Style="{StaticResource CardFrame}"
+                   Margin="0,24,0,0"
+                   BackgroundColor="{StaticResource WarningLight}"
+                   BorderColor="{StaticResource Warning}"
+                   SemanticProperties.Description="Dica sobre o Check HALT">
+                <Label Text="💡 Toque em cada letra para ver como lidar com esse sentimento agora."
+                       Style="{StaticResource MutedText}"
+                       FontSize="13"
+                       SemanticProperties.Description="Dica: Toque em cada letra para ver como lidar com esse sentimento agora." />
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

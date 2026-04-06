@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             xmlns:controls="clr-namespace:SoPorHoje.App.Controls"
+             x:Class="SoPorHoje.App.Views.StepsPage"
+             x:DataType="vm:StepsViewModel"
+             Title="Os 12 Passos"
+             BackgroundColor="{StaticResource BgPrimary}"
+             SemanticProperties.Description="Os 12 Passos de Alcoólicos Anônimos">
+
+    <ScrollView Style="{StaticResource PageScrollView}">
+        <VerticalStackLayout Padding="16,12,16,32" Spacing="0">
+
+            <!-- Header -->
+            <Label Text="Os 12 Passos"
+                   Style="{StaticResource PageTitle}"
+                   Margin="0,4,0,4"
+                   SemanticProperties.HeadingLevel="Level1"
+                   SemanticProperties.Description="Os 12 Passos de A.A." />
+            <Label Text="O programa de recuperação de Alcoólicos Anônimos"
+                   Style="{StaticResource MutedText}"
+                   Margin="0,0,0,20"
+                   SemanticProperties.Description="O programa de recuperação de Alcoólicos Anônimos" />
+
+            <!-- Accordion de Passos -->
+            <CollectionView ItemsSource="{Binding Steps}"
+                            SelectionMode="None"
+                            SemanticProperties.Description="Lista dos 12 Passos">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:StepItem">
+                        <controls:AccordionItem
+                            Number="{Binding Number}"
+                            Title="{Binding Title}"
+                            Body="{Binding Text}"
+                            IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                            Margin="0,0,0,0" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             xmlns:controls="clr-namespace:SoPorHoje.App.Controls"
+             x:Class="SoPorHoje.App.Views.TraditionsPage"
+             x:DataType="vm:TraditionsViewModel"
+             Title="As 12 Tradições"
+             BackgroundColor="{StaticResource BgPrimary}"
+             SemanticProperties.Description="As 12 Tradições de Alcoólicos Anônimos">
+
+    <ScrollView Style="{StaticResource PageScrollView}">
+        <VerticalStackLayout Padding="16,12,16,32" Spacing="0">
+
+            <!-- Header -->
+            <Label Text="As 12 Tradições"
+                   Style="{StaticResource PageTitle}"
+                   Margin="0,4,0,4"
+                   SemanticProperties.HeadingLevel="Level1"
+                   SemanticProperties.Description="As 12 Tradições de A.A." />
+            <Label Text="Os princípios de unidade de Alcoólicos Anônimos"
+                   Style="{StaticResource MutedText}"
+                   Margin="0,0,0,20"
+                   SemanticProperties.Description="Os princípios de unidade de Alcoólicos Anônimos" />
+
+            <!-- Accordion de Tradições -->
+            <CollectionView ItemsSource="{Binding Traditions}"
+                            SelectionMode="None"
+                            SemanticProperties.Description="Lista das 12 Tradições">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:TraditionItem">
+                        <controls:AccordionItem
+                            Number="{Binding Number}"
+                            Title="{Binding Title}"
+                            Body="{Binding Text}"
+                            IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                            Margin="0,0,0,0" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
