@@ -28,6 +28,7 @@ public partial class HaltItem : ObservableObject
     public Color CardColor { get; }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibilityDescription))]
     private bool _isExpanded;
 
     private static readonly Color[] _colors =
