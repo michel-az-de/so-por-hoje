@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Background -->
+    <Color x:Key="BgPrimary">#F5F0E8</Color>
+    <Color x:Key="BgSurface">#FFFFFF</Color>
+    <Color x:Key="BgCard">#FAFAF7</Color>
+
+    <!-- Text -->
+    <Color x:Key="TextPrimary">#1A1A1A</Color>
+    <Color x:Key="TextSecondary">#4A4A4A</Color>
+    <Color x:Key="TextMuted">#888888</Color>
+    <Color x:Key="TextOnAccent">#FFFFFF</Color>
+
+    <!-- Brand & Accent -->
+    <Color x:Key="Accent">#2E5BB8</Color>        <!-- Azul AA -->
+    <Color x:Key="AccentLight">#4A7AD4</Color>
+    <Color x:Key="Warm">#C8963E</Color>           <!-- Dourado Promessas -->
+    <Color x:Key="WarmLight">#E8B85A</Color>
+
+    <!-- Semantic -->
+    <Color x:Key="Success">#28A745</Color>        <!-- Verde Ao Vivo -->
+    <Color x:Key="SuccessLight">#D4EDDA</Color>
+    <Color x:Key="Danger">#DC3545</Color>
+    <Color x:Key="DangerLight">#F8D7DA</Color>
+    <Color x:Key="Warning">#FFC107</Color>
+    <Color x:Key="WarningLight">#FFF3CD</Color>
+
+    <!-- Borders -->
+    <Color x:Key="BorderLight">#E0D8C8</Color>
+    <Color x:Key="BorderMedium">#C8B89A</Color>
+
+    <!-- HALT Cards -->
+    <Color x:Key="HaltHunger">#FF6B35</Color>
+    <Color x:Key="HaltAnger">#E74C3C</Color>
+    <Color x:Key="HaltLonely">#8E44AD</Color>
+    <Color x:Key="HaltTired">#2980B9</Color>
+
+</ResourceDictionary>
