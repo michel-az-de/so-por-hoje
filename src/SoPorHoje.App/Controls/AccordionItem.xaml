@@ -37,7 +37,8 @@
                        BorderColor="Transparent"
                        HasShadow="False"
                        VerticalOptions="Center"
-                       SemanticProperties.IsHeadingLevel="None">
+                       SemanticProperties.Description=""
+                       SemanticProperties.HeadingLevel="None">
                     <Label Text="{Binding Source={x:Reference accordionRoot}, Path=Number}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
