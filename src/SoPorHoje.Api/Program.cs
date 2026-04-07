@@ -119,14 +119,20 @@ var app = builder.Build();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+// Swagger habilitado apenas em desenvolvimento para evitar exposição acidental em produção.
+// Para habilitar em outros ambientes, defina ASPNETCORE_ENVIRONMENT=Development ou adicione
+// uma variável de ambiente customizada e ajuste esta condição.
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/v1-en/swagger.json", "Só Por Hoje API — English");
-    c.SwaggerEndpoint("/swagger/v1-ptbr/swagger.json", "Só Por Hoje API — Português");
-    c.RoutePrefix = "swagger";
-    c.DocumentTitle = "Só Por Hoje API";
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1-en/swagger.json", "Só Por Hoje API — English");
+        c.SwaggerEndpoint("/swagger/v1-ptbr/swagger.json", "Só Por Hoje API — Português");
+        c.RoutePrefix = "swagger";
+        c.DocumentTitle = "Só Por Hoje API";
+    });
+}
 
 app.UseCors();
 

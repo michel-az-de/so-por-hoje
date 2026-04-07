@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SoPorHoje.Api.Data;
+using SoPorHoje.Api.DTOs;
 using SoPorHoje.Api.Services;
 
 namespace SoPorHoje.Api.Endpoints;
@@ -23,18 +24,17 @@ public static class HealthEndpoints
 
             var lastRun = ScraperHostedService.LastRunAt;
 
-            return Results.Ok(new
-            {
-                status = dbStatus == "ok" ? "healthy" : "degraded",
-                database = dbStatus,
-                scraper = lastRun.HasValue
+            return Results.Ok(new HealthResponse(
+                Status: dbStatus == "ok" ? "healthy" : "degraded",
+                Database: dbStatus,
+                Scraper: lastRun.HasValue
                     ? $"last_run: {lastRun.Value:yyyy-MM-ddTHH:mm:ssZ}"
-                    : "never_run",
-            });
+                    : "never_run"
+            ));
         })
         .WithName("Health")
         .WithSummary("Verifica saúde da API e do banco de dados")
         .WithTags("Health")
-        .Produces(StatusCodes.Status200OK);
+        .Produces<HealthResponse>(StatusCodes.Status200OK);
     }
 }
