@@ -119,9 +119,10 @@ var app = builder.Build();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 
-// Swagger habilitado apenas em desenvolvimento para evitar exposição acidental em produção.
-// Para habilitar em outros ambientes, defina ASPNETCORE_ENVIRONMENT=Development ou adicione
-// uma variável de ambiente customizada e ajuste esta condição.
+// Swagger enabled only in Development to avoid accidental exposure in production.
+// / Swagger habilitado apenas em Development para evitar exposição acidental em produção.
+// To enable in other environments, set ASPNETCORE_ENVIRONMENT=Development or adjust this check.
+// / Para habilitar em outros ambientes, defina ASPNETCORE_ENVIRONMENT=Development ou ajuste esta condição.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
