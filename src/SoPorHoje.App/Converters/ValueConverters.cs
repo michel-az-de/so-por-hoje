@@ -175,7 +175,10 @@ public class HexToColorConverter : IValueConverter
         if (value is string hex && !string.IsNullOrWhiteSpace(hex))
         {
             try { return Color.FromArgb(hex); }
-            catch { /* fall through */ }
+            catch (ArgumentException)
+            {
+                System.Diagnostics.Debug.WriteLine($"[HexToColorConverter] Invalid hex color value: '{hex}'");
+            }
         }
         return Colors.Gray;
     }

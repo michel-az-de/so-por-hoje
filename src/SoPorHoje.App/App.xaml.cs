@@ -15,7 +15,7 @@ public partial class App : Application
         _shell = shell;
         _onboardingPage = onboardingPage;
         _userRepo = userRepo;
-        MainPage = new ContentPage(); // Placeholder while loading
+        MainPage = new ContentPage(); // Temporary blank page shown briefly while OnStart() checks user profile
     }
 
     protected override async void OnStart()

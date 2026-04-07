@@ -38,10 +38,10 @@ public partial class OnboardingViewModel : BaseViewModel
             };
             await _userRepo.SaveProfileAsync(profile);
 
-            // Restart navigation to AppShell
+            // Navigate to AppShell after onboarding is complete
             if (Application.Current is not null)
             {
-                var shell = Handler?.MauiContext?.Services.GetService<AppShell>();
+                var shell = Application.Current.Handler?.MauiContext?.Services.GetService<AppShell>();
                 Application.Current.MainPage = shell as Page ?? Application.Current.MainPage;
             }
         });

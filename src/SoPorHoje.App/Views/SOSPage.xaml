@@ -45,7 +45,7 @@
                                FontSize="14"
                                TextColor="{StaticResource TextMuted}"
                                HorizontalOptions="Center"
-                               SemanticProperties.Description="{Binding BreathingCycle, StringFormat='Ciclo {0} de 4'}" />
+                               SemanticProperties.Description="{Binding BreathingCycle, StringFormat='Ciclo {0} de 4 de respiração'}" />
                         <Button Text="Parar"
                                 Command="{Binding StopBreathingCommand}"
                                 BackgroundColor="{StaticResource BgCard}"
