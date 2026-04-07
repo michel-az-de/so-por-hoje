@@ -28,7 +28,9 @@ public static class ReflectionEndpoints
         })
         .WithName("GetTodayReflection")
         .WithSummary("Retorna a reflexão do dia atual (horário de Brasília)")
-        .WithTags("Reflections");
+        .WithTags("Reflections")
+        .Produces<ReflectionDto>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status404NotFound);
 
         app.MapGet("/api/reflections", async (AppDbContext db, int page = 1, int pageSize = 50) =>
         {
@@ -47,6 +49,7 @@ public static class ReflectionEndpoints
         })
         .WithName("GetReflections")
         .WithSummary("Lista reflexões paginadas (seed completo do app)")
-        .WithTags("Reflections");
+        .WithTags("Reflections")
+        .Produces<PagedReflectionsResponse>(StatusCodes.Status200OK);
     }
 }
