@@ -34,6 +34,7 @@ public static class HealthEndpoints
         })
         .WithName("Health")
         .WithSummary("Verifica saúde da API e do banco de dados")
-        .WithTags("Health");
+        .WithTags("Health")
+        .Produces(StatusCodes.Status200OK);
     }
 }

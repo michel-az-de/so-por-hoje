@@ -17,6 +17,8 @@ public static class AuthEndpoints
         })
         .WithName("AuthAnonymous")
         .WithSummary("Cria ou retorna usuário anônimo pelo deviceId")
-        .WithTags("Auth");
+        .WithTags("Auth")
+        .Produces<AnonymousAuthResponse>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 }

@@ -19,7 +19,9 @@ public static class SyncEndpoints
         })
         .WithName("SyncPush")
         .WithSummary("Recebe dados locais do app e persiste no servidor")
-        .WithTags("Sync");
+        .WithTags("Sync")
+        .Produces<SyncPushResponse>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
 
         app.MapGet("/api/sync/pull", async (AppDbContext db, string? since) =>
         {
@@ -39,7 +41,8 @@ public static class SyncEndpoints
         })
         .WithName("SyncPull")
         .WithSummary("Retorna dados atualizados desde o timestamp informado")
-        .WithTags("Sync");
+        .WithTags("Sync")
+        .Produces<SyncPullResponse>(StatusCodes.Status200OK);
 
         app.MapDelete("/api/users/{deviceId}", async (string deviceId, SyncService sync) =>
         {
@@ -51,7 +54,9 @@ public static class SyncEndpoints
         })
         .WithName("DeleteUser")
         .WithSummary("Remove permanentemente todos os dados do usuário")
-        .WithTags("Users");
+        .WithTags("Users")
+        .Produces(StatusCodes.Status204NoContent)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
     }
 
     internal static MeetingDto MapMeetingDto(Data.Entities.MeetingEntity m, TimeOnly now)

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SoPorHoje.Api.Data;
+using SoPorHoje.Api.DTOs;
 
 namespace SoPorHoje.Api.Endpoints;
 
@@ -21,7 +22,8 @@ public static class MeetingEndpoints
         })
         .WithName("GetMeetings")
         .WithSummary("Lista todas as reuniões ativas")
-        .WithTags("Meetings");
+        .WithTags("Meetings")
+        .Produces<IEnumerable<MeetingDto>>(StatusCodes.Status200OK);
 
         app.MapGet("/api/meetings/live", async (AppDbContext db) =>
         {
@@ -55,6 +57,7 @@ public static class MeetingEndpoints
         })
         .WithName("GetLiveMeetings")
         .WithSummary("Retorna reuniões acontecendo agora (horário de Brasília)")
-        .WithTags("Meetings");
+        .WithTags("Meetings")
+        .Produces<IEnumerable<MeetingDto>>(StatusCodes.Status200OK);
     }
 }
