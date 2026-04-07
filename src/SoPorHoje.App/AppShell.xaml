@@ -11,6 +11,27 @@
        SemanticProperties.Description="Aplicativo Só Por Hoje">
 
     <TabBar>
+        <!-- Tab Início -->
+        <ShellContent Title="Início"
+                      Icon="tab_home.png"
+                      ContentTemplate="{DataTemplate views:HomePage}"
+                      Route="home"
+                      SemanticProperties.Description="Tab da Tela Inicial" />
+
+        <!-- Tab Fichas -->
+        <ShellContent Title="Fichas"
+                      Icon="tab_chips.png"
+                      ContentTemplate="{DataTemplate views:ChipsPage}"
+                      Route="chips"
+                      SemanticProperties.Description="Tab de Fichas de Sobriedade" />
+
+        <!-- Tab SOS -->
+        <ShellContent Title="SOS"
+                      Icon="tab_sos.png"
+                      ContentTemplate="{DataTemplate views:SOSPage}"
+                      Route="sos"
+                      SemanticProperties.Description="Tab de Emergência SOS" />
+
         <!-- Tab Reuniões -->
         <ShellContent Title="Reuniões"
                       Icon="tab_meetings.png"

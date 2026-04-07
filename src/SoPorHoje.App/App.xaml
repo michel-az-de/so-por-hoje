@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:SoPorHoje.App.Converters"
              x:Class="SoPorHoje.App.App">
 
     <Application.Resources>
@@ -9,6 +10,25 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Converters -->
+            <converters:LiveToBackgroundConverter x:Key="LiveToBackgroundConverter" />
+            <converters:LiveToBorderConverter x:Key="LiveToBorderConverter" />
+            <converters:LiveToButtonTextConverter x:Key="LiveToButtonTextConverter" />
+            <converters:LiveToButtonColorConverter x:Key="LiveToButtonColorConverter" />
+            <converters:LiveToAccessibilityConverter x:Key="LiveToAccessibilityConverter" />
+            <converters:BoolToRotationConverter x:Key="BoolToRotationConverter" />
+            <converters:BoolToAccentConverter x:Key="BoolToAccentConverter" />
+            <converters:BoolToNumberTextColorConverter x:Key="BoolToNumberTextColorConverter" />
+            <converters:InverseBoolConverter x:Key="InvertBoolConverter" />
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+            <converters:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+            <converters:ReasonButtonTextConverter x:Key="ReasonButtonTextConverter" />
+            <converters:ExpandButtonTextConverter x:Key="ExpandButtonTextConverter" />
+            <converters:HexToColorConverter x:Key="HexToColorConverter" />
+            <converters:CountToProgressConverter x:Key="CountToProgressConverter" />
+            <converters:ChipStatusIconConverter x:Key="ChipStatusIconConverter" />
+            <converters:HaltColorConverter x:Key="HaltColorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 

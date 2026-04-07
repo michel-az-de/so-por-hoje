@@ -1,10 +1,27 @@
+using SoPorHoje.App.Views;
+using SoPorHoje.Core.Interfaces;
+
 namespace SoPorHoje.App;
 
 public partial class App : Application
 {
-    public App(AppShell shell)
+    private readonly IUserRepository _userRepo;
+    private readonly AppShell _shell;
+    private readonly OnboardingPage _onboardingPage;
+
+    public App(AppShell shell, OnboardingPage onboardingPage, IUserRepository userRepo)
     {
         InitializeComponent();
-        MainPage = shell;
+        _shell = shell;
+        _onboardingPage = onboardingPage;
+        _userRepo = userRepo;
+        MainPage = new ContentPage(); // Placeholder while loading
+    }
+
+    protected override async void OnStart()
+    {
+        base.OnStart();
+        var hasProfile = await _userRepo.HasProfileAsync();
+        MainPage = hasProfile ? _shell : (Page)new NavigationPage(_onboardingPage);
     }
 }

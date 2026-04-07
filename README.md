@@ -1,126 +1,121 @@
-# so-por-hoje
-Projeto para ajudar membros de Alcoólicos Anônimos em sua recuperação diária.
+# Só Por Hoje 🕊️
 
-## Sobre
+Companheiro diário para membros de Alcoólicos Anônimos no Brasil.
 
-**Só Por Hoje** é um companheiro diário para membros de A.A. no Brasil. Este repositório contém o backend API REST em ASP.NET Core 8 com scraper de reuniões online.
+## Funcionalidades
+
+- 📊 Contador de dias sóbrios com fichas do padrão brasileiro de A.A.
+- ✋ Compromisso diário ("Só por hoje, eu não vou beber")
+- 📖 365 reflexões diárias em pt-BR
+- 🔑 Motivo pessoal como âncora emocional
+- 🆘 Kit de emergência: respiração guiada, frases de enfrentamento, HALT, CVV
+- 🤝 Reuniões online ao vivo (dados do intergrupos-aa.org.br)
+- 📖 Programa completo: 12 Passos, 12 Tradições, Promessas, Só Por Hoje, Orações
+- 🏅 Sistema de fichas com celebrações
+- 🔒 100% privado — dados no dispositivo, sync opcional e anônimo
+
+## Stack
+
+- **App**: .NET MAUI 8 (Android + iOS), MVVM com CommunityToolkit
+- **Backend**: ASP.NET Core 8 Minimal API, EF Core + PostgreSQL
+- **Banco local**: SQLite via sqlite-net-pcl
+- **Scraper**: HtmlAgilityPack + Playwright (intergrupos-aa.org.br)
 
 ## Estrutura
 
 ```
+SoPorHoje.sln
 src/
-├── SoPorHoje.Api/       # API REST (ASP.NET Core 8 Minimal API + EF Core + PostgreSQL)
-├── SoPorHoje.Scraper/   # Scraper de reuniões (intergrupos-aa.org.br)
-└── data/
-    └── daily_reflections_pt-br.json   # 365 reflexões diárias em português
+├── SoPorHoje.Core/      # Models, Interfaces, Constants (net8.0)
+├── SoPorHoje.Data/      # Repositories SQLite, SyncEngine (net8.0)
+├── SoPorHoje.Api/       # API REST ASP.NET Core + EF Core + PostgreSQL (net8.0)
+├── SoPorHoje.Scraper/   # Scraper de reuniões (net8.0)
+├── SoPorHoje.App/       # .NET MAUI (net8.0-android;net8.0-ios)
+└── SoPorHoje.Tests/     # xUnit tests (net8.0)
+data/
+└── daily_reflections_pt-br.json   # 365 reflexões diárias
+docker-compose.yml
 ```
 
-## Setup Rápido com Docker
+## Setup Local
+
+### Pré-requisitos
+
+- .NET 8 SDK
+- Docker e Docker Compose
+- Para o app: Visual Studio 2022+ com workload MAUI, ou VS Code + extensão MAUI
+
+### Backend (API + PostgreSQL)
 
 ```bash
-cd src
-docker-compose -f SoPorHoje.Api/docker-compose.yml up --build
+docker-compose up -d
+# API disponível em http://localhost:5000
+# Swagger UI em http://localhost:5000/swagger
 ```
 
-A API estará disponível em `http://localhost:5000`.  
-Swagger UI em `http://localhost:5000/swagger`.
-
-## Setup para Desenvolvimento Local
-
-**Pré-requisitos:** .NET 8 SDK, PostgreSQL 16
+Ou sem Docker:
 
 ```bash
-# 1. Criar banco de dados
-createdb soporhoje
-
-# 2. Aplicar migrations
+# Requer PostgreSQL 16 local com banco "soporhoje"
 cd src/SoPorHoje.Api
 dotnet ef database update
-
-# 3. Rodar a API
 dotnet run
 ```
 
-## Endpoints da API
-
-### Autenticação Anônima
+### Testes (não exigem MAUI)
 
 ```bash
-# Criar/recuperar usuário anônimo pelo deviceId
-curl -X POST http://localhost:5000/api/auth/anonymous \
-  -H "Content-Type: application/json" \
-  -d '{"deviceId": "meu-device-uuid-123"}'
-# Resposta: {"userId": "...", "isNew": true}
+cd src
+dotnet restore
+dotnet build
+dotnet test SoPorHoje.Tests/SoPorHoje.Tests.csproj
 ```
 
-### Sincronização
+### App (requer workload MAUI)
 
 ```bash
-# Push — enviar dados do app para o servidor
-curl -X POST http://localhost:5000/api/sync/push \
-  -H "Content-Type: application/json" \
-  -d '{
-    "deviceId": "meu-device-uuid-123",
-    "profile": {
-      "sobrietyDate": "2024-06-15",
-      "personalReason": "Pela minha família"
-    },
-    "pledges": [
-      {"pledgeDate": "2026-04-06", "pledgedAt": "2026-04-06T08:30:00Z", "fulfilled": null}
-    ],
-    "chipEvents": [],
-    "resetEvents": []
-  }'
+# Android (emulador)
+dotnet build src/SoPorHoje.App -t:Run -f net8.0-android
 
-# Pull — buscar dados atualizados desde um timestamp
-curl "http://localhost:5000/api/sync/pull?since=2026-01-01T00:00:00Z"
+# iOS (macOS com Xcode)
+dotnet build src/SoPorHoje.App -t:Run -f net8.0-ios
 ```
 
-### Reuniões
+## API Endpoints
 
-```bash
-# Todas as reuniões ativas
-curl http://localhost:5000/api/meetings
-
-# Reuniões acontecendo agora (horário de Brasília)
-curl http://localhost:5000/api/meetings/live
-```
-
-### Reflexões
-
-```bash
-# Reflexão do dia (horário de Brasília)
-curl http://localhost:5000/api/reflections/today
-
-# Lista paginada (seed completo para o app)
-curl "http://localhost:5000/api/reflections?page=1&pageSize=50"
-```
-
-### Administração
-
-```bash
-# Health check
-curl http://localhost:5000/api/health
-
-# Deletar todos os dados de um usuário (GDPR)
-curl -X DELETE http://localhost:5000/api/users/meu-device-uuid-123
-```
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/api/health` | Health check |
+| POST | `/api/auth/anonymous` | Criar/recuperar usuário anônimo |
+| GET | `/api/reflections/today` | Reflexão do dia (horário Brasília) |
+| GET | `/api/reflections` | Lista paginada de reflexões |
+| GET | `/api/meetings` | Todas as reuniões ativas |
+| GET | `/api/meetings/live` | Reuniões acontecendo agora |
+| POST | `/api/sync/push` | Enviar dados do app ao servidor |
+| GET | `/api/sync/pull` | Buscar atualizações do servidor |
+| DELETE | `/api/users/{deviceId}` | Deletar dados (GDPR) |
 
 ## Privacidade
 
 - IDs de usuário são UUIDs anônimos gerados no device — sem email/senha
 - Nenhum dado pessoal identificável é coletado
-- Delete permanente disponível via `DELETE /api/users/{deviceId}`
+- Dados locais armazenados em SQLite no dispositivo
+- Delete permanente via `DELETE /api/users/{deviceId}`
 - Sem analytics de terceiros
 
-## Scraper de Reuniões
+## Fichas de Sobriedade (padrão brasileiro)
 
-O scraper coleta reuniões do site intergrupos-aa.org.br a cada 30 minutos:
+| Ficha | Tempo | Emoji |
+|-------|-------|-------|
+| Amarela | Ingresso (1 dia) | 🌅 |
+| Azul | 3 meses | 🌊 |
+| Rosa | 6 meses | 🌸 |
+| Vermelha | 9 meses | 🔥 |
+| Verde | 1 ano | 🌿 |
+| Verde Gravata | 2 anos | 🌳 |
+| Branca Gravata | 5 anos | ⭐ |
+| Amarela Gravata | 10 anos | 🏆 |
+| Azul Gravata | 15 anos | 💎 |
+| Rosa Gravata | 20 anos | 👑 |
 
-1. Tenta endpoints de API JSON internos do site
-2. Fallback: scraping HTML com HtmlAgilityPack
-3. Rate limit: máximo 1 request a cada 10 segundos
-4. Retorna lista vazia se o site estiver indisponível (nunca crasha)
-
-Ver [SoPorHoje.Scraper/README.md](src/SoPorHoje.Scraper/README.md) para mais detalhes.
 

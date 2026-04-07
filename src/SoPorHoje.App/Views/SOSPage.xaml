@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             x:Class="SoPorHoje.App.Views.SOSPage"
+             x:DataType="vm:SOSViewModel"
+             BackgroundColor="{StaticResource BgPrimary}"
+             SemanticProperties.Description="Página de emergência SOS com ferramentas de apoio">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="16">
+
+            <!-- Header -->
+            <Label Text="🆘 Kit de Emergência"
+                   FontSize="22" FontAttributes="Bold"
+                   TextColor="{StaticResource Danger}"
+                   HorizontalOptions="Center"
+                   SemanticProperties.HeadingLevel="H1"
+                   SemanticProperties.Description="Kit de emergência SOS para momento de crise" />
+
+            <!-- Breathing Exercise -->
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Respiração Guiada"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           SemanticProperties.HeadingLevel="H2" />
+
+                    <!-- Breathing active -->
+                    <VerticalStackLayout IsVisible="{Binding IsBreathingActive}"
+                                        Spacing="8" HorizontalOptions="Center">
+                        <Label Text="{Binding BreathingInstruction}"
+                               FontSize="28" FontAttributes="Bold"
+                               TextColor="{StaticResource Accent}"
+                               HorizontalOptions="Center"
+                               SemanticProperties.Description="{Binding BreathingInstruction}" />
+                        <Label Text="{Binding BreathingSeconds}"
+                               FontSize="48" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}"
+                               HorizontalOptions="Center"
+                               SemanticProperties.Description="{Binding BreathingSeconds, StringFormat='Tempo: {0} segundos'}" />
+                        <Label Text="{Binding BreathingCycle, StringFormat='Ciclo {0} de 4'}"
+                               FontSize="14"
+                               TextColor="{StaticResource TextMuted}"
+                               HorizontalOptions="Center"
+                               SemanticProperties.Description="{Binding BreathingCycle, StringFormat='Ciclo {0} de 4'}" />
+                        <Button Text="Parar"
+                                Command="{Binding StopBreathingCommand}"
+                                BackgroundColor="{StaticResource BgCard}"
+                                TextColor="{StaticResource Danger}"
+                                HeightRequest="44" CornerRadius="10"
+                                SemanticProperties.Description="Parar exercício de respiração" />
+                    </VerticalStackLayout>
+
+                    <!-- Breathing complete -->
+                    <Label IsVisible="{Binding BreathingComplete}"
+                           Text="Muito bem! Você conseguiu 🌿"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource Success}"
+                           HorizontalOptions="Center"
+                           SemanticProperties.Description="Exercício de respiração completo" />
+
+                    <!-- Start button -->
+                    <Button IsVisible="{Binding IsBreathingActive, Converter={StaticResource InvertBoolConverter}}"
+                            Text="Iniciar Respiração (4 ciclos)"
+                            Command="{Binding StartBreathingCommand}"
+                            BackgroundColor="{StaticResource Accent}"
+                            TextColor="White"
+                            HeightRequest="52" CornerRadius="12"
+                            SemanticProperties.Description="Iniciar exercício de respiração guiada com 4 ciclos"
+                            SemanticProperties.Hint="Inspire por 4 segundos, segure por 4, expire por 6" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Coping Phrases -->
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Frases de Enfrentamento"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           SemanticProperties.HeadingLevel="H2" />
+                    <CollectionView ItemsSource="{Binding CopingPhrases}"
+                                    SemanticProperties.Description="Frases de apoio para momentos difíceis">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Frame BackgroundColor="{StaticResource BgCard}"
+                                       BorderColor="{StaticResource BorderLight}"
+                                       CornerRadius="10" Padding="12,10" Margin="0,4"
+                                       SemanticProperties.Description="{Binding .}">
+                                    <Label Text="{Binding .}"
+                                           FontSize="14"
+                                           TextColor="{StaticResource TextPrimary}" />
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- HALT Check -->
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Verificação HALT"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           SemanticProperties.HeadingLevel="H2" />
+                    <Label Text="Você está se sentindo:"
+                           FontSize="13" TextColor="{StaticResource TextSecondary}" />
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" RowSpacing="8" ColumnSpacing="8">
+                        <!-- Hungry -->
+                        <Frame Grid.Row="0" Grid.Column="0"
+                               BackgroundColor="{Binding IsHungry, Converter={StaticResource HaltColorConverter}, ConverterParameter='hungry'}"
+                               BorderColor="{StaticResource HaltHunger}"
+                               CornerRadius="10" Padding="12,10">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SOSViewModel}}, Path=ToggleHungryCommand}" />
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                                <Label Text="😋" FontSize="28" HorizontalOptions="Center"
+                                       SemanticProperties.Description="Fome" />
+                                <Label Text="Com Fome" FontSize="12" FontAttributes="Bold"
+                                       TextColor="{StaticResource HaltHunger}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Frame>
+                        <!-- Angry -->
+                        <Frame Grid.Row="0" Grid.Column="1"
+                               BackgroundColor="{Binding IsAngry, Converter={StaticResource HaltColorConverter}, ConverterParameter='angry'}"
+                               BorderColor="{StaticResource HaltAnger}"
+                               CornerRadius="10" Padding="12,10">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SOSViewModel}}, Path=ToggleAngryCommand}" />
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                                <Label Text="😠" FontSize="28" HorizontalOptions="Center"
+                                       SemanticProperties.Description="Raiva" />
+                                <Label Text="Com Raiva" FontSize="12" FontAttributes="Bold"
+                                       TextColor="{StaticResource HaltAnger}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Frame>
+                        <!-- Lonely -->
+                        <Frame Grid.Row="1" Grid.Column="0"
+                               BackgroundColor="{Binding IsLonely, Converter={StaticResource HaltColorConverter}, ConverterParameter='lonely'}"
+                               BorderColor="{StaticResource HaltLonely}"
+                               CornerRadius="10" Padding="12,10">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SOSViewModel}}, Path=ToggleLonelyCommand}" />
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                                <Label Text="😔" FontSize="28" HorizontalOptions="Center"
+                                       SemanticProperties.Description="Solidão" />
+                                <Label Text="Solitário" FontSize="12" FontAttributes="Bold"
+                                       TextColor="{StaticResource HaltLonely}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Frame>
+                        <!-- Tired -->
+                        <Frame Grid.Row="1" Grid.Column="1"
+                               BackgroundColor="{Binding IsTired, Converter={StaticResource HaltColorConverter}, ConverterParameter='tired'}"
+                               BorderColor="{StaticResource HaltTired}"
+                               CornerRadius="10" Padding="12,10">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SOSViewModel}}, Path=ToggleTiredCommand}" />
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                                <Label Text="😴" FontSize="28" HorizontalOptions="Center"
+                                       SemanticProperties.Description="Cansaço" />
+                                <Label Text="Cansado" FontSize="12" FontAttributes="Bold"
+                                       TextColor="{StaticResource HaltTired}"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Emergency Contacts -->
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Ajuda Imediata"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           SemanticProperties.HeadingLevel="H2" />
+
+                    <!-- CVV -->
+                    <Button Text="📞 CVV — 188"
+                            Command="{Binding CallCvvCommand}"
+                            BackgroundColor="{StaticResource Danger}"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            HeightRequest="52" CornerRadius="12"
+                            SemanticProperties.Description="Ligar para o CVV, Centro de Valorização da Vida, número 188"
+                            SemanticProperties.Hint="Apoio emocional gratuito e disponível 24 horas" />
+
+                    <!-- Live Meeting -->
+                    <Button IsVisible="{Binding HasLiveMeeting}"
+                            Text="🤝 Entrar em reunião agora"
+                            Command="{Binding JoinMeetingCommand}"
+                            CommandParameter="{Binding LiveMeetingUrl}"
+                            BackgroundColor="{StaticResource Success}"
+                            TextColor="White"
+                            HeightRequest="52" CornerRadius="12"
+                            SemanticProperties.Description="Entrar em reunião de AA ao vivo agora"
+                            SemanticProperties.Hint="Abre o link da reunião no navegador" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

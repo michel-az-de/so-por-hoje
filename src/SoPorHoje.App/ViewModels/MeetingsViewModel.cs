@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SoPorHoje.App.Interfaces;
-using SoPorHoje.App.Models;
+using SoPorHoje.Core.Interfaces;
+using SoPorHoje.Core.Models;
 
 namespace SoPorHoje.App.ViewModels;
 

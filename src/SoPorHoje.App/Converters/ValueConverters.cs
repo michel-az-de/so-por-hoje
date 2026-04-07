@@ -126,3 +126,109 @@ public class InverseBoolConverter : IValueConverter
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => value is bool b && !b;
 }
+
+/// <summary>Retorna true se string não for nula nem vazia.</summary>
+public class StringNotEmptyConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => !string.IsNullOrWhiteSpace(value as string);
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Retorna true se string for nula ou vazia.</summary>
+public class StringIsNullOrEmptyConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => string.IsNullOrWhiteSpace(value as string);
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Texto do botão de motivo pessoal: "Editar" se já existe, "Adicionar motivo" se não.</summary>
+public class ReasonButtonTextConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => string.IsNullOrWhiteSpace(value as string) ? "Adicionar meu motivo" : "Editar";
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Texto do botão de reflexão: "Ler reflexão completa" ou "Fechar".</summary>
+public class ExpandButtonTextConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is bool expanded && expanded ? "Fechar" : "Ler reflexão completa";
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Converte hex string em Color para fichas dinâmicas.</summary>
+public class HexToColorConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is string hex && !string.IsNullOrWhiteSpace(hex))
+        {
+            try { return Color.FromArgb(hex); }
+            catch { /* fall through */ }
+        }
+        return Colors.Gray;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Converte contagem conquistada/total em proporção de progresso (0.0–1.0).</summary>
+public class CountToProgressConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is int count && parameter is string totalStr && int.TryParse(totalStr, out var total) && total > 0)
+            return Math.Clamp((double)count / total, 0.0, 1.0);
+        return 0.0;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Retorna ícone ✓ se ficha conquistada, 🔒 caso contrário.</summary>
+public class ChipStatusIconConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is bool earned && earned ? "✓" : "🔒";
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Cor de fundo do card HALT — destacado se selecionado.</summary>
+public class HaltColorConverter : IValueConverter
+{
+    private static readonly Dictionary<string, string> ActiveColors = new()
+    {
+        { "hungry", "#FFE5D4" },
+        { "angry",  "#FADBD8" },
+        { "lonely", "#E8DAEF" },
+        { "tired",  "#D6EAF8" },
+    };
+
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        var isSelected = value is bool b && b;
+        var key = parameter as string ?? string.Empty;
+        if (isSelected && ActiveColors.TryGetValue(key, out var hex))
+            return Color.FromArgb(hex);
+        return Application.Current?.Resources["BgCard"] as Color
+               ?? Color.FromArgb("#FAFAF7");
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}

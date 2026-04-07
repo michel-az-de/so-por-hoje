@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             x:Class="SoPorHoje.App.Views.OnboardingPage"
+             x:DataType="vm:OnboardingViewModel"
+             BackgroundColor="{StaticResource BgPrimary}"
+             NavigationPage.HasNavigationBar="False"
+             SemanticProperties.Description="Tela de boas-vindas para configurar sua data de sobriedade">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="24" Padding="24,48,24,24"
+                             VerticalOptions="Center">
+
+            <!-- Logo / Emoji -->
+            <Label Text="🕊️"
+                   FontSize="72"
+                   HorizontalOptions="Center"
+                   SemanticProperties.Description="Pomba branca, símbolo de paz e esperança" />
+
+            <!-- Welcome -->
+            <Label Text="Só Por Hoje"
+                   FontSize="32" FontAttributes="Bold"
+                   TextColor="{StaticResource TextPrimary}"
+                   HorizontalOptions="Center"
+                   SemanticProperties.HeadingLevel="H1" />
+
+            <Label Text="Seu companheiro diário de sobriedade"
+                   FontSize="16"
+                   TextColor="{StaticResource TextSecondary}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   SemanticProperties.Description="Seu companheiro diário de sobriedade" />
+
+            <!-- Sobriety Date Picker -->
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="20,16">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Qual é a sua data de sobriedade?"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           SemanticProperties.HeadingLevel="H2" />
+
+                    <Label Text="A data do seu último gole — o início do seu caminho."
+                           FontSize="13"
+                           TextColor="{StaticResource TextSecondary}" />
+
+                    <DatePicker Date="{Binding SelectedDate}"
+                                MaximumDate="{Binding MaximumDate}"
+                                Format="dd/MM/yyyy"
+                                TextColor="{StaticResource TextPrimary}"
+                                BackgroundColor="{StaticResource BgCard}"
+                                SemanticProperties.Description="Selecionar data de sobriedade"
+                                SemanticProperties.Hint="Escolha a data do seu último gole. Datas futuras não são permitidas" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Privacy Note -->
+            <Label Text="🔒 Seus dados ficam apenas no seu dispositivo. Sem cadastro, sem email."
+                   FontSize="12"
+                   TextColor="{StaticResource TextMuted}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   SemanticProperties.Description="Privacidade: seus dados ficam apenas no seu dispositivo" />
+
+            <!-- Start Button -->
+            <Button Text="Começar minha jornada"
+                    Command="{Binding StartCommand}"
+                    BackgroundColor="{StaticResource Accent}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HeightRequest="56" CornerRadius="14"
+                    IsEnabled="{Binding CanStart}"
+                    SemanticProperties.Description="Começar usando o aplicativo"
+                    SemanticProperties.Hint="Salva sua data de sobriedade e abre o aplicativo" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             x:Class="SoPorHoje.App.Views.HomePage"
+             x:DataType="vm:HomeViewModel"
+             BackgroundColor="{StaticResource BgPrimary}"
+             SemanticProperties.Description="Tela inicial com contador de sobriedade">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="16,12">
+
+            <!-- Live Meeting Banner -->
+            <Frame IsVisible="{Binding HasLiveMeeting}"
+                   BackgroundColor="{StaticResource SuccessLight}"
+                   BorderColor="{StaticResource Success}"
+                   CornerRadius="12" Padding="12,10">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                        <Label Text="🟢 AO VIVO agora"
+                               FontSize="11" FontAttributes="Bold"
+                               TextColor="{StaticResource Success}"
+                               SemanticProperties.HeadingLevel="None" />
+                        <Label Text="{Binding LiveMeetingName}"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}" />
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1"
+                            Text="Entrar"
+                            Command="{Binding JoinLiveMeetingCommand}"
+                            CommandParameter="{Binding LiveMeetingUrl}"
+                            BackgroundColor="{StaticResource Success}"
+                            TextColor="White"
+                            HeightRequest="44" MinimumWidthRequest="80"
+                            CornerRadius="8"
+                            SemanticProperties.Description="Entrar na reunião ao vivo agora"
+                            SemanticProperties.Hint="Abre o link da reunião no navegador" />
+                </Grid>
+            </Frame>
+
+            <!-- Next Meeting (when no live) -->
+            <Label IsVisible="{Binding NextMeetingText, Converter={StaticResource StringNotEmptyConverter}}"
+                   Text="{Binding NextMeetingText}"
+                   FontSize="13" TextColor="{StaticResource TextSecondary}"
+                   HorizontalOptions="Center" />
+
+            <!-- Sobriety Counter Card -->
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="20,16">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{Binding SoberDaysText}"
+                           FontSize="22" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           HorizontalOptions="Center"
+                           SemanticProperties.HeadingLevel="H1"
+                           SemanticProperties.Description="{Binding SoberDaysText}" />
+
+                    <!-- Current Chip -->
+                    <Frame BackgroundColor="{StaticResource BgCard}"
+                           BorderColor="{Binding CurrentChipColor}"
+                           CornerRadius="10" Padding="12,8"
+                           HorizontalOptions="Center">
+                        <Label Text="{Binding CurrentChipName}"
+                               FontSize="15" FontAttributes="Bold"
+                               TextColor="{Binding CurrentChipColor}"
+                               SemanticProperties.Description="{Binding CurrentChipName}" />
+                    </Frame>
+
+                    <!-- Progress to next chip -->
+                    <ProgressBar Progress="{Binding ChipProgress}"
+                                 ProgressColor="{Binding CurrentChipColor}"
+                                 HeightRequest="6"
+                                 SemanticProperties.Description="Progresso para próxima ficha" />
+                    <Label Text="{Binding DaysUntilNextChipText}"
+                           FontSize="12" TextColor="{StaticResource TextMuted}"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Daily Pledge -->
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Compromisso Diário"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           SemanticProperties.HeadingLevel="H2" />
+
+                    <!-- Not pledged yet -->
+                    <Button IsVisible="{Binding HasPledgedToday, Converter={StaticResource InvertBoolConverter}}"
+                            Text="Só por hoje, eu não vou beber"
+                            Command="{Binding MakePledgeCommand}"
+                            BackgroundColor="{StaticResource Accent}"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            HeightRequest="52" CornerRadius="12"
+                            SemanticProperties.Description="Fazer compromisso de sobriedade hoje"
+                            SemanticProperties.Hint="Toque para registrar seu compromisso diário" />
+
+                    <!-- Already pledged -->
+                    <Label IsVisible="{Binding HasPledgedToday}"
+                           Text="✅ Compromisso feito hoje"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource Success}"
+                           HorizontalOptions="Center"
+                           SemanticProperties.Description="Compromisso diário já realizado hoje" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Personal Reason -->
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Meu Motivo"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           SemanticProperties.HeadingLevel="H2" />
+
+                    <!-- No reason yet / editing -->
+                    <VerticalStackLayout IsVisible="{Binding IsEditingReason}" Spacing="8">
+                        <Editor Text="{Binding EditingReasonText}"
+                                Placeholder="Por que você está aqui? Escreva seu motivo pessoal..."
+                                PlaceholderColor="{StaticResource TextMuted}"
+                                TextColor="{StaticResource TextPrimary}"
+                                BackgroundColor="{StaticResource BgCard}"
+                                MinimumHeightRequest="80"
+                                SemanticProperties.Description="Campo para escrever seu motivo pessoal" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0"
+                                    Text="Cancelar"
+                                    Command="{Binding CancelEditingReasonCommand}"
+                                    BackgroundColor="{StaticResource BgCard}"
+                                    TextColor="{StaticResource TextSecondary}"
+                                    HeightRequest="44" CornerRadius="10"
+                                    SemanticProperties.Description="Cancelar edição do motivo" />
+                            <Button Grid.Column="1"
+                                    Text="Salvar"
+                                    Command="{Binding SaveReasonCommand}"
+                                    BackgroundColor="{StaticResource Accent}"
+                                    TextColor="White"
+                                    HeightRequest="44" CornerRadius="10"
+                                    IsEnabled="{Binding EditingReasonText, Converter={StaticResource StringNotEmptyConverter}}"
+                                    SemanticProperties.Description="Salvar motivo pessoal" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Show existing reason -->
+                    <VerticalStackLayout IsVisible="{Binding IsEditingReason, Converter={StaticResource InvertBoolConverter}}"
+                                        Spacing="8">
+                        <Label IsVisible="{Binding PersonalReason, Converter={StaticResource StringNotEmptyConverter}}"
+                               Text="{Binding PersonalReason}"
+                               FontSize="15" FontAttributes="Italic"
+                               TextColor="{StaticResource TextSecondary}"
+                               SemanticProperties.Description="{Binding PersonalReason}" />
+                        <Label IsVisible="{Binding PersonalReason, Converter={StaticResource StringIsNullOrEmptyConverter}}"
+                               Text="Adicione seu motivo pessoal para se manter firme."
+                               FontSize="14" TextColor="{StaticResource TextMuted}" />
+                        <Button Text="{Binding PersonalReason, Converter={StaticResource ReasonButtonTextConverter}}"
+                                Command="{Binding StartEditingReasonCommand}"
+                                BackgroundColor="{StaticResource BgCard}"
+                                TextColor="{StaticResource Accent}"
+                                HeightRequest="44" CornerRadius="10"
+                                SemanticProperties.Description="Editar meu motivo pessoal" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Daily Reflection -->
+            <Frame IsVisible="{Binding HasReflection}"
+                   BackgroundColor="{StaticResource BgSurface}"
+                   BorderColor="{StaticResource BorderLight}"
+                   CornerRadius="16" Padding="16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding ReflectionTitle}"
+                           FontSize="16" FontAttributes="Bold"
+                           TextColor="{StaticResource Warm}"
+                           SemanticProperties.HeadingLevel="H2"
+                           SemanticProperties.Description="{Binding ReflectionTitle}" />
+
+                    <Label Text="{Binding ReflectionQuote}"
+                           FontSize="14" FontAttributes="Italic"
+                           TextColor="{StaticResource TextSecondary}"
+                           SemanticProperties.Description="{Binding ReflectionQuote}" />
+
+                    <Label IsVisible="{Binding IsReflectionExpanded}"
+                           Text="{Binding ReflectionText}"
+                           FontSize="14"
+                           TextColor="{StaticResource TextPrimary}"
+                           SemanticProperties.Description="{Binding ReflectionText}" />
+
+                    <Label IsVisible="{Binding IsReflectionExpanded}"
+                           Text="{Binding ReflectionReference}"
+                           FontSize="12" TextColor="{StaticResource TextMuted}"
+                           SemanticProperties.Description="{Binding ReflectionReference}" />
+
+                    <Button Text="{Binding IsReflectionExpanded, Converter={StaticResource ExpandButtonTextConverter}}"
+                            Command="{Binding ToggleReflectionCommand}"
+                            BackgroundColor="{StaticResource BgCard}"
+                            TextColor="{StaticResource Accent}"
+                            HeightRequest="44" CornerRadius="10"
+                            SemanticProperties.Description="Expandir ou fechar reflexão completa"
+                            SemanticProperties.Hint="Toque para ler a reflexão completa do dia" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

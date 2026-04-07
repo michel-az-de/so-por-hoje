@@ -1,7 +1,9 @@
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using SoPorHoje.App.Converters;
-using SoPorHoje.App.Interfaces;
+using SoPorHoje.Core.Interfaces;
+using SoPorHoje.Data.Local;
+using SoPorHoje.Data.Local.Repositories;
+using SoPorHoje.Data.Sync;
 using SoPorHoje.App.Services;
 using SoPorHoje.App.ViewModels;
 using SoPorHoje.App.Views;
@@ -25,10 +27,25 @@ public static class MauiProgram
                 fonts.AddFont("SourceSerif4-Italic.ttf",  "SourceSerif4Italic");
             });
 
-        // ── Services ──────────────────────────────────────────────────────────
-        builder.Services.AddSingleton<IMeetingRepository, InMemoryMeetingRepository>();
+        // ── Database ──────────────────────────────────────────────────────────
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "soporhoje.db3");
+        builder.Services.AddSingleton(_ => new SoPorHojeDatabase(dbPath,
+            builder.Services.BuildServiceProvider()
+                .GetRequiredService<ILogger<SoPorHojeDatabase>>()));
+
+        // ── Repositories / Services ───────────────────────────────────────────
+        builder.Services.AddSingleton<IUserRepository, UserRepository>();
+        builder.Services.AddSingleton<IPledgeRepository, PledgeRepository>();
+        builder.Services.AddSingleton<IReflectionRepository, ReflectionRepository>();
+        builder.Services.AddSingleton<IMeetingRepository, MeetingRepository>();
+        builder.Services.AddSingleton<IChipService, ChipService>();
+        builder.Services.AddSingleton<ISyncService, SyncEngine>();
 
         // ── ViewModels ────────────────────────────────────────────────────────
+        builder.Services.AddTransient<HomeViewModel>();
+        builder.Services.AddTransient<ChipsViewModel>();
+        builder.Services.AddTransient<OnboardingViewModel>();
+        builder.Services.AddTransient<SOSViewModel>();
         builder.Services.AddTransient<MeetingsViewModel>();
         builder.Services.AddTransient<ProgramViewModel>();
         builder.Services.AddTransient<StepsViewModel>();
@@ -39,6 +56,10 @@ public static class MauiProgram
         builder.Services.AddTransient<HaltCheckViewModel>();
 
         // ── Views ─────────────────────────────────────────────────────────────
+        builder.Services.AddTransient<HomePage>();
+        builder.Services.AddTransient<ChipsPage>();
+        builder.Services.AddTransient<OnboardingPage>();
+        builder.Services.AddTransient<SOSPage>();
         builder.Services.AddTransient<MeetingsPage>();
         builder.Services.AddTransient<ProgramPage>();
         builder.Services.AddTransient<StepsPage>();

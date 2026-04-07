@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             x:Class="SoPorHoje.App.Views.ChipsPage"
+             x:DataType="vm:ChipsViewModel"
+             BackgroundColor="{StaticResource BgPrimary}"
+             SemanticProperties.Description="Tela de fichas de sobriedade conquistadas">
+
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="12" Padding="16">
+
+                <!-- Progress Header -->
+                <Frame BackgroundColor="{StaticResource BgSurface}"
+                       BorderColor="{StaticResource BorderLight}"
+                       CornerRadius="14" Padding="16">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Fichas de Sobriedade"
+                               FontSize="18" FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}"
+                               SemanticProperties.HeadingLevel="H1" />
+                        <ProgressBar Progress="{Binding EarnedCount, Converter={StaticResource CountToProgressConverter}, ConverterParameter='10'}"
+                                     ProgressColor="{StaticResource Accent}"
+                                     HeightRequest="8"
+                                     SemanticProperties.Description="{Binding ProgressText}" />
+                        <Label Text="{Binding ProgressText}"
+                               FontSize="13" TextColor="{StaticResource TextSecondary}"
+                               SemanticProperties.Description="{Binding ProgressText}" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Chips List -->
+                <CollectionView ItemsSource="{Binding Chips}"
+                                SemanticProperties.Description="Lista de fichas de sobriedade">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ChipDisplayItem">
+                            <Frame Margin="0,4"
+                                   BackgroundColor="{StaticResource BgSurface}"
+                                   BorderColor="{StaticResource BorderLight}"
+                                   CornerRadius="12" Padding="14,12"
+                                   Opacity="{Binding Opacity}"
+                                   SemanticProperties.Description="{Binding Chip.Name}">
+                                <Grid ColumnDefinitions="52,*,Auto" ColumnSpacing="12">
+                                    <!-- Chip emoji -->
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Chip.Emoji}"
+                                           FontSize="32"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           SemanticProperties.Description="{Binding Chip.Name}" />
+
+                                    <!-- Chip details -->
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                        <Label Text="{Binding Chip.Name}"
+                                               FontSize="15" FontAttributes="Bold"
+                                               TextColor="{Binding Chip.ColorHex, Converter={StaticResource HexToColorConverter}}" />
+                                        <Label Text="{Binding Chip.Label}"
+                                               FontSize="13"
+                                               TextColor="{StaticResource TextSecondary}" />
+                                        <Label Text="{Binding DaysUntilText}"
+                                               FontSize="12"
+                                               TextColor="{StaticResource TextMuted}" />
+                                    </VerticalStackLayout>
+
+                                    <!-- Badge earned / locked -->
+                                    <Label Grid.Column="2"
+                                           Text="{Binding IsEarned, Converter={StaticResource ChipStatusIconConverter}}"
+                                           FontSize="22"
+                                           VerticalOptions="Center"
+                                           SemanticProperties.Description="{Binding DaysUntilText}" />
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Celebration Popup -->
+        <Grid IsVisible="{Binding ShowCelebration}"
+              BackgroundColor="#CC000000">
+            <Frame BackgroundColor="{StaticResource BgSurface}"
+                   CornerRadius="20" Padding="24"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   Margin="32,0"
+                   SemanticProperties.Description="Parabéns pela sua nova ficha">
+                <VerticalStackLayout Spacing="16" HorizontalOptions="Center">
+                    <Label Text="{Binding CelebrationChip.Chip.Emoji}"
+                           FontSize="64"
+                           HorizontalOptions="Center"
+                           SemanticProperties.Description="Emoji da ficha conquistada" />
+                    <Label Text="🎉 Nova Ficha!"
+                           FontSize="22" FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"
+                           HorizontalOptions="Center"
+                           SemanticProperties.HeadingLevel="H1" />
+                    <Label Text="{Binding CelebrationChip.Chip.Name}"
+                           FontSize="18"
+                           TextColor="{Binding CelebrationChip.Chip.ColorHex, Converter={StaticResource HexToColorConverter}}"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold" />
+                    <Label Text="{Binding CelebrationChip.Chip.Label}"
+                           FontSize="15"
+                           TextColor="{StaticResource TextSecondary}"
+                           HorizontalOptions="Center" />
+                    <Button Text="Muito bem! 🙏"
+                            Command="{Binding DismissCelebrationCommand}"
+                            BackgroundColor="{StaticResource Accent}"
+                            TextColor="White"
+                            HeightRequest="52" CornerRadius="12"
+                            WidthRequest="200"
+                            SemanticProperties.Description="Fechar parabéns pela ficha conquistada" />
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+    </Grid>
+
+</ContentPage>

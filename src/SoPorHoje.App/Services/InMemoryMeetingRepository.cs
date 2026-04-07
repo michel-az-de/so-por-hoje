@@ -1,13 +1,13 @@
-using SoPorHoje.App.Interfaces;
-using SoPorHoje.App.Models;
+using SoPorHoje.Core.Interfaces;
+using SoPorHoje.Core.Models;
 
 namespace SoPorHoje.App.Services;
 
 /// <summary>
 /// Repositório em memória com dados de reuniões online de AA Brasil.
-/// Em produção, substituir por implementação com banco de dados local.
+/// Usado como fallback quando não há dados sincronizados do servidor.
 /// </summary>
-public class InMemoryMeetingRepository : IMeetingRepository
+public class InMemoryMeetingRepository : SoPorHoje.Core.Interfaces.IMeetingRepository
 {
     private readonly List<OnlineMeeting> _meetings = new()
     {
@@ -17,9 +17,8 @@ public class InMemoryMeetingRepository : IMeetingRepository
             GroupName = "Grupo Serenidade Online",
             MeetingUrl = "https://meet.jit.si/grupo-serenidade-aa",
             DaysOfWeekMask = 62,   // Seg–Sex
-            StartTime = new TimeSpan(7, 0, 0),
-            EndTime = new TimeSpan(8, 0, 0),
-            IsActive = true,
+            StartTimeTicks = new TimeSpan(7, 0, 0).Ticks,
+            EndTimeTicks = new TimeSpan(8, 0, 0).Ticks,
         },
         new OnlineMeeting
         {
@@ -27,19 +26,17 @@ public class InMemoryMeetingRepository : IMeetingRepository
             GroupName = "Grupo Esperança Brasil",
             MeetingUrl = "https://meet.jit.si/grupo-esperanca-aa",
             DaysOfWeekMask = 127,  // Todos os dias
-            StartTime = new TimeSpan(12, 0, 0),
-            EndTime = new TimeSpan(13, 0, 0),
-            IsActive = true,
+            StartTimeTicks = new TimeSpan(12, 0, 0).Ticks,
+            EndTimeTicks = new TimeSpan(13, 0, 0).Ticks,
         },
         new OnlineMeeting
         {
             Id = 3,
             GroupName = "Grupo Recuperação 24h",
             MeetingUrl = "https://meet.jit.si/grupo-recuperacao24",
-            DaysOfWeekMask = 65,   // Dom + Sáb (bit 0 + bit 6)
-            StartTime = new TimeSpan(10, 0, 0),
-            EndTime = new TimeSpan(11, 30, 0),
-            IsActive = true,
+            DaysOfWeekMask = 65,   // Dom + Sáb
+            StartTimeTicks = new TimeSpan(10, 0, 0).Ticks,
+            EndTimeTicks = new TimeSpan(11, 30, 0).Ticks,
         },
         new OnlineMeeting
         {
@@ -47,9 +44,8 @@ public class InMemoryMeetingRepository : IMeetingRepository
             GroupName = "Grupo Novo Amanhecer",
             MeetingUrl = "https://meet.jit.si/grupo-novo-amanhecer",
             DaysOfWeekMask = 62,   // Seg–Sex
-            StartTime = new TimeSpan(19, 30, 0),
-            EndTime = new TimeSpan(20, 30, 0),
-            IsActive = true,
+            StartTimeTicks = new TimeSpan(19, 30, 0).Ticks,
+            EndTimeTicks = new TimeSpan(20, 30, 0).Ticks,
         },
         new OnlineMeeting
         {
@@ -57,34 +53,39 @@ public class InMemoryMeetingRepository : IMeetingRepository
             GroupName = "Grupo Alvorada SP",
             MeetingUrl = "https://meet.jit.si/grupo-alvorada-sp",
             DaysOfWeekMask = 126,  // Seg–Sáb
-            StartTime = new TimeSpan(21, 0, 0),
-            EndTime = new TimeSpan(22, 0, 0),
-            IsActive = true,
+            StartTimeTicks = new TimeSpan(21, 0, 0).Ticks,
+            EndTimeTicks = new TimeSpan(22, 0, 0).Ticks,
         },
     };
 
-    public Task<IReadOnlyList<OnlineMeeting>> GetAllAsync()
-        => Task.FromResult<IReadOnlyList<OnlineMeeting>>(_meetings.Where(m => m.IsActive).ToList());
+    public Task<List<OnlineMeeting>> GetAllAsync()
+        => Task.FromResult(_meetings.ToList());
 
-    public Task<IReadOnlyList<OnlineMeeting>> GetLiveNowAsync()
-        => Task.FromResult<IReadOnlyList<OnlineMeeting>>(_meetings.Where(m => m.IsActive && m.IsLiveNow).ToList());
+    public Task<List<OnlineMeeting>> GetLiveNowAsync()
+        => Task.FromResult(_meetings.Where(m => m.IsLiveNow).ToList());
 
     public Task<OnlineMeeting?> GetNextAsync()
     {
         var next = _meetings
-            .Where(m => m.IsActive && m.MinutesUntilStart.HasValue)
+            .Where(m => m.MinutesUntilStart.HasValue)
             .OrderBy(m => m.MinutesUntilStart)
             .FirstOrDefault();
         return Task.FromResult(next);
     }
 
-    public Task UpsertAsync(OnlineMeeting meeting)
+    public Task UpsertAsync(List<OnlineMeeting> meetings)
     {
-        var existing = _meetings.FindIndex(m => m.Id == meeting.Id);
-        if (existing >= 0)
-            _meetings[existing] = meeting;
-        else
-            _meetings.Add(meeting);
+        foreach (var meeting in meetings)
+        {
+            var idx = _meetings.FindIndex(m => m.Id == meeting.Id);
+            if (idx >= 0)
+                _meetings[idx] = meeting;
+            else
+                _meetings.Add(meeting);
+        }
         return Task.CompletedTask;
     }
+
+    public Task<DateTime?> GetLastScrapeTimeAsync()
+        => Task.FromResult<DateTime?>(null);
 }
