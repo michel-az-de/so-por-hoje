@@ -15,7 +15,7 @@ public partial class App : Application
         _shell = shell;
         _onboardingPage = onboardingPage;
         _userRepo = userRepo;
-        MainPage = new ContentPage(); // Temporary blank page shown briefly while OnStart() checks user profile
+        MainPage = new ContentPage(); // Temporary blank page shown until OnStart() completes its async profile check and sets the real root page
     }
 
     protected override async void OnStart()

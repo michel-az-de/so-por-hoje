@@ -38,11 +38,15 @@ public partial class OnboardingViewModel : BaseViewModel
             };
             await _userRepo.SaveProfileAsync(profile);
 
-            // Navigate to AppShell after onboarding is complete
+            // Navigate to AppShell after onboarding is complete.
+            // Shell.Current is unavailable here because MainPage is a NavigationPage (not Shell),
+            // so we resolve AppShell from the application's DI container.
             if (Application.Current is not null)
             {
-                var shell = Application.Current.Handler?.MauiContext?.Services.GetService<AppShell>();
-                Application.Current.MainPage = shell as Page ?? Application.Current.MainPage;
+                var services = Application.Current.Handler?.MauiContext?.Services;
+                var shell = services?.GetService<AppShell>()
+                            ?? throw new InvalidOperationException("AppShell not registered in DI container.");
+                Application.Current.MainPage = shell;
             }
         });
     }

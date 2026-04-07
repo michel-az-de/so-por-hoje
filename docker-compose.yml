@@ -1,8 +1,8 @@
 services:
   api:
     build:
-      context: src
-      dockerfile: SoPorHoje.Api/Dockerfile
+      context: src                          # Build context is the src/ folder
+      dockerfile: SoPorHoje.Api/Dockerfile  # Resolves to src/SoPorHoje.Api/Dockerfile
     ports:
       - "5000:8080"
     environment:
