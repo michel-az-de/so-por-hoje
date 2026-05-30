@@ -4,16 +4,16 @@ using SoPorHoje.App.Constants;
 
 namespace SoPorHoje.App.ViewModels;
 
-/// <summary>ViewModel das Orações com cópia para clipboard.</summary>
+/// <summary>ViewModel das Meditações com cópia para a área de transferência.</summary>
 public partial class PrayersViewModel : BaseViewModel
 {
     public ObservableCollection<PrayerItem> Prayers { get; }
 
     public PrayersViewModel()
     {
-        Title = "Orações";
+        Title = "Meditações";
         Prayers = new ObservableCollection<PrayerItem>(
-            AAContent.Prayers.Select(p => new PrayerItem(p.Name, p.Text)));
+            ProgramContent.Meditacoes.Select(p => new PrayerItem(p.Name, p.Text)));
     }
 
     [RelayCommand]

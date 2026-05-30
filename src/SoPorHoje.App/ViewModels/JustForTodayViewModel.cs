@@ -11,6 +11,6 @@ public partial class JustForTodayViewModel : BaseViewModel
     public JustForTodayViewModel()
     {
         Title = "Só Por Hoje";
-        Meditations = new ObservableCollection<string>(AAContent.JustForToday);
+        Meditations = new ObservableCollection<string>(ProgramContent.JustForToday);
     }
 }

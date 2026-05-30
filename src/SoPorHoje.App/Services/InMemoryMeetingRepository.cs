@@ -4,8 +4,9 @@ using SoPorHoje.App.Models;
 namespace SoPorHoje.App.Services;
 
 /// <summary>
-/// Repositório em memória com dados de reuniões online de AA Brasil.
-/// Em produção, substituir por implementação com banco de dados local.
+/// Repositório em memória com reuniões de exemplo (placeholder).
+/// Será substituído por um feed estático de grupos de apoio abertos,
+/// mantido pela comunidade via Pull Request.
 /// </summary>
 public class InMemoryMeetingRepository : IMeetingRepository
 {
@@ -15,7 +16,7 @@ public class InMemoryMeetingRepository : IMeetingRepository
         {
             Id = 1,
             GroupName = "Grupo Serenidade Online",
-            MeetingUrl = "https://meet.jit.si/grupo-serenidade-aa",
+            MeetingUrl = "https://meet.jit.si/grupo-serenidade",
             DaysOfWeekMask = 62,   // Seg–Sex
             StartTime = new TimeSpan(7, 0, 0),
             EndTime = new TimeSpan(8, 0, 0),
@@ -25,7 +26,7 @@ public class InMemoryMeetingRepository : IMeetingRepository
         {
             Id = 2,
             GroupName = "Grupo Esperança Brasil",
-            MeetingUrl = "https://meet.jit.si/grupo-esperanca-aa",
+            MeetingUrl = "https://meet.jit.si/grupo-esperanca",
             DaysOfWeekMask = 127,  // Todos os dias
             StartTime = new TimeSpan(12, 0, 0),
             EndTime = new TimeSpan(13, 0, 0),

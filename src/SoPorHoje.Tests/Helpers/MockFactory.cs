@@ -39,9 +39,11 @@ public static class MockFactory
         => new()
         {
             DateKey = dateKey,
-            Title = "TÍTULO TESTE",
+            Title = "Título de teste",
             Quote = "Citação de teste para verificação.",
             Text = "Texto reflexivo completo para testes unitários.",
-            Reference = "ALCOÓLICOS ANÔNIMOS, p. 99",
+            Theme = "teste",
+            License = "CC-BY-SA-4.0",
+            Author = "Projeto Só Por Hoje",
         };
 }

@@ -8,4 +8,5 @@ public interface IReflectionRepository
     Task<DailyReflection?> GetByDateKeyAsync(string dateKey);
     Task SeedFromJsonAsync(Stream jsonStream);
     Task<int> GetCountAsync();
+    Task<List<DailyReflection>> GetAllAsync();
 }

@@ -3,7 +3,7 @@ using SQLite;
 namespace SoPorHoje.Core.Models;
 
 /// <summary>
-/// Fichas de sobriedade do padrão brasileiro de A.A.
+/// Fichas de sobriedade por marcos de tempo (cores nomeadas).
 /// Sequência: Amarela (ingresso), Azul (3m), Rosa (6m), Vermelha (9m),
 /// Verde (1a), Verde Gravata (2a), Branca Gravata (5a), Amarela Gravata (10a),
 /// Azul Gravata (15a), Rosa Gravata (20a).

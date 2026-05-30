@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             x:Class="SoPorHoje.App.Views.HomePage"
+             x:DataType="vm:HomeViewModel"
+             Title="Hoje"
+             BackgroundColor="{StaticResource BgPrimary}"
+             SemanticProperties.Description="Tela inicial — o seu dia de hoje">
+
+    <ScrollView Style="{StaticResource PageScrollView}">
+        <VerticalStackLayout Padding="16,12,16,32" Spacing="16">
+
+            <!-- Carregando -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="{StaticResource Accent}"
+                               HorizontalOptions="Center"
+                               Margin="0,24,0,0" />
+
+            <!-- ===================== ONBOARDING ===================== -->
+            <VerticalStackLayout IsVisible="{Binding NeedsOnboarding}" Spacing="14">
+                <Label Text="Bem-vindo 💛"
+                       Style="{StaticResource PageTitle}"
+                       Margin="0,8,0,0"
+                       SemanticProperties.HeadingLevel="Level1" />
+                <Label Text="Vamos começar pelo seu tempo de recuperação. Tudo fica só no seu aparelho — sem cadastro."
+                       Style="{StaticResource MutedText}" />
+
+                <Frame Style="{StaticResource CardFrame}">
+                    <VerticalStackLayout Spacing="14">
+                        <Label Text="Quando foi o seu último dia?"
+                               Style="{StaticResource SectionLabel}"
+                               SemanticProperties.HeadingLevel="Level2" />
+                        <DatePicker Date="{Binding OnboardingDate}"
+                                    Format="dd/MM/yyyy"
+                                    SemanticProperties.Description="Data do seu último dia" />
+
+                        <Label Text="Por que você está aqui? (opcional)"
+                               Style="{StaticResource SectionLabel}"
+                               Margin="0,8,0,0"
+                               SemanticProperties.HeadingLevel="Level2" />
+                        <Frame Padding="8,0"
+                               BorderColor="{StaticResource BorderLight}"
+                               BackgroundColor="{StaticResource BgCard}"
+                               CornerRadius="8"
+                               HasShadow="False">
+                            <Editor Text="{Binding OnboardingReason}"
+                                    Placeholder="Pela minha família, pela minha saúde..."
+                                    HeightRequest="90"
+                                    AutoSize="TextChanges"
+                                    SemanticProperties.Description="Seu motivo pessoal" />
+                        </Frame>
+
+                        <Button Text="Começar"
+                                Style="{StaticResource PrimaryButton}"
+                                Command="{Binding SaveOnboardingCommand}"
+                                Margin="0,4,0,0"
+                                SemanticProperties.Description="Salvar e começar" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+
+            <!-- ===================== PAINEL DO DIA ===================== -->
+            <VerticalStackLayout IsVisible="{Binding ShowDashboard}" Spacing="16">
+
+                <Label Text="{Binding Greeting}"
+                       Style="{StaticResource MutedText}"
+                       Margin="0,4,0,0" />
+
+                <!-- Contador -->
+                <Frame Style="{StaticResource CardFrame}">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{Binding SoberDaysLabel}"
+                               FontFamily="DMSans"
+                               FontSize="48"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Accent}"
+                               HorizontalOptions="Center"
+                               SemanticProperties.HeadingLevel="Level1"
+                               SemanticProperties.Description="{Binding SoberDaysLabel, StringFormat='{0} de recuperação'}" />
+                        <Label Text="de recuperação, um dia de cada vez"
+                               Style="{StaticResource MutedText}"
+                               HorizontalOptions="Center" />
+
+                        <!-- Marco / ficha -->
+                        <Label Margin="0,14,0,0" HorizontalOptions="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding ChipEmoji}" FontSize="20" />
+                                    <Span Text="   " />
+                                    <Span Text="{Binding ChipName}"
+                                          FontFamily="DMSans"
+                                          FontAttributes="Bold"
+                                          TextColor="{StaticResource TextPrimary}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <ProgressBar Progress="{Binding ChipProgress}"
+                                     ProgressColor="{StaticResource Warm}"
+                                     Margin="0,6,0,0" />
+                        <Label Text="{Binding NextChipText}"
+                               Style="{StaticResource CaptionText}"
+                               HorizontalOptions="Center"
+                               Margin="0,4,0,0" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Combinado de hoje -->
+                <Button Text="✋  Fazer meu combinado de hoje"
+                        Style="{StaticResource PrimaryButton}"
+                        IsVisible="{Binding HasNotPledged}"
+                        Command="{Binding MakePledgeCommand}"
+                        SemanticProperties.Description="Registrar o meu compromisso de hoje" />
+                <Frame Style="{StaticResource CardFrame}"
+                       IsVisible="{Binding HasPledgedToday}"
+                       BackgroundColor="{StaticResource SuccessLight}"
+                       BorderColor="{StaticResource Success}">
+                    <Label Text="✓  Você fez o seu combinado de hoje. Só por hoje."
+                           Style="{StaticResource BodyText}"
+                           TextColor="{StaticResource TextPrimary}" />
+                </Frame>
+
+                <!-- Reflexão do dia -->
+                <Frame Style="{StaticResource CardFrame}" IsVisible="{Binding HasReflection}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Reflexão de hoje" Style="{StaticResource MutedText}" />
+                        <Label Text="{Binding ReflectionTitle}"
+                               Style="{StaticResource SectionLabel}"
+                               TextColor="{StaticResource Warm}"
+                               SemanticProperties.HeadingLevel="Level2" />
+                        <Label Text="{Binding ReflectionQuote}"
+                               Style="{StaticResource SerifText}"
+                               FontAttributes="Italic" />
+                        <Label Text="{Binding ReflectionText}"
+                               Style="{StaticResource SerifText}" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Seu motivo -->
+                <Frame Style="{StaticResource CardFrame}" IsVisible="{Binding HasPersonalReason}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="O seu motivo" Style="{StaticResource MutedText}" />
+                        <Label Text="{Binding PersonalReason}" Style="{StaticResource SerifText}" FontAttributes="Italic" />
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -3,7 +3,7 @@ using SoPorHoje.App.Constants;
 
 namespace SoPorHoje.App.ViewModels;
 
-/// <summary>ViewModel das Promessas do A.A.</summary>
+/// <summary>ViewModel das Promessas — o que a recuperação devolve (texto original).</summary>
 public partial class PromisesViewModel : BaseViewModel
 {
     public ObservableCollection<string> Promises { get; }
@@ -11,6 +11,6 @@ public partial class PromisesViewModel : BaseViewModel
     public PromisesViewModel()
     {
         Title = "As Promessas";
-        Promises = new ObservableCollection<string>(AAContent.Promises);
+        Promises = new ObservableCollection<string>(ProgramContent.Promises);
     }
 }

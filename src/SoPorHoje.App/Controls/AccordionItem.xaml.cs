@@ -1,7 +1,7 @@
 namespace SoPorHoje.App.Controls;
 
 /// <summary>
-/// Accordion item reutilizável para listas de Passos, Tradições e similares.
+/// Accordion item reutilizável para listas expansíveis (A Trilha, Combinados etc.).
 /// </summary>
 public partial class AccordionItem : ContentView
 {

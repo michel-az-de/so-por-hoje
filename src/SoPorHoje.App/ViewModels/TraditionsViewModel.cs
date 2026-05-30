@@ -3,16 +3,16 @@ using SoPorHoje.App.Constants;
 
 namespace SoPorHoje.App.ViewModels;
 
-/// <summary>ViewModel das 12 Tradições.</summary>
+/// <summary>ViewModel dos Combinados — compromissos diários comigo mesmo.</summary>
 public partial class TraditionsViewModel : BaseViewModel
 {
     public ObservableCollection<TraditionItem> Traditions { get; }
 
     public TraditionsViewModel()
     {
-        Title = "As 12 Tradições";
+        Title = "Combinados";
         Traditions = new ObservableCollection<TraditionItem>(
-            AAContent.TwelveTraditions.Select((t, i) => new TraditionItem(i + 1, t)));
+            ProgramContent.Combinados.Select((t, i) => new TraditionItem(i + 1, t)));
     }
 }
 
@@ -28,7 +28,7 @@ public partial class TraditionItem : CommunityToolkit.Mvvm.ComponentModel.Observ
     public TraditionItem(int number, string text)
     {
         Number = number;
-        Title = $"Tradição {number}";
+        Title = $"Combinado {number}";
         Text = text;
     }
 }

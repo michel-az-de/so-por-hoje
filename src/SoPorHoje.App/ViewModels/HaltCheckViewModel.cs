@@ -13,7 +13,7 @@ public partial class HaltCheckViewModel : BaseViewModel
     {
         Title = "Check HALT";
         Items = new ObservableCollection<HaltItem>(
-            AAContent.HaltCheck.Select(h => new HaltItem(h.Letter, h.Word, h.Question, h.Tip, h.Emoji)));
+            ProgramContent.HaltCheck.Select(h => new HaltItem(h.Letter, h.Word, h.Question, h.Tip, h.Emoji)));
     }
 }
 

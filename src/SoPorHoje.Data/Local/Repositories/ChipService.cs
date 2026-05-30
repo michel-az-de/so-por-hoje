@@ -55,20 +55,21 @@ public class ChipService : IChipService
         {
             var db = await _database.GetConnectionAsync();
             var earnedChips = Chips.Where(c => soberDays >= c.RequiredDays).ToList();
-            var celebratedDays = (await db.Table<ChipEarnedEvent>()
-                .Where(e => e.CelebrationShown)
-                .ToListAsync())
-                .Select(e => e.ChipRequiredDays)
-                .ToHashSet();
+
+            // Carrega todos os eventos de uma vez e indexa em memória (evita N+1 por ficha).
+            var existingByRequiredDays = new Dictionary<int, ChipEarnedEvent>();
+            foreach (var evt in await db.Table<ChipEarnedEvent>().ToListAsync())
+                existingByRequiredDays[evt.ChipRequiredDays] = evt;
 
             var uncelebrated = new List<ChipEarnedEvent>();
-            foreach (var chip in earnedChips.Where(c => !celebratedDays.Contains(c.RequiredDays)))
+            foreach (var chip in earnedChips)
             {
-                var existing = await db.Table<ChipEarnedEvent>()
-                    .Where(e => e.ChipRequiredDays == chip.RequiredDays)
-                    .FirstOrDefaultAsync();
-
-                if (existing == null)
+                if (existingByRequiredDays.TryGetValue(chip.RequiredDays, out var existing))
+                {
+                    if (!existing.CelebrationShown)
+                        uncelebrated.Add(existing);
+                }
+                else
                 {
                     var newEvent = new ChipEarnedEvent
                     {
@@ -78,10 +79,6 @@ public class ChipService : IChipService
                     };
                     await db.InsertAsync(newEvent);
                     uncelebrated.Add(newEvent);
-                }
-                else if (!existing.CelebrationShown)
-                {
-                    uncelebrated.Add(existing);
                 }
             }
 

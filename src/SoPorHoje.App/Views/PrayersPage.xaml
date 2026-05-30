@@ -4,33 +4,33 @@
              xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
              x:Class="SoPorHoje.App.Views.PrayersPage"
              x:DataType="vm:PrayersViewModel"
-             Title="Orações"
+             Title="Meditações"
              BackgroundColor="{StaticResource BgPrimary}"
-             SemanticProperties.Description="Orações de Alcoólicos Anônimos">
+             SemanticProperties.Description="Meditações">
 
     <ScrollView Style="{StaticResource PageScrollView}">
         <VerticalStackLayout Padding="16,12,16,32" Spacing="0">
 
             <!-- Header -->
-            <Label Text="Orações"
+            <Label Text="Meditações"
                    Style="{StaticResource PageTitle}"
                    Margin="0,4,0,4"
                    SemanticProperties.HeadingLevel="Level1"
-                   SemanticProperties.Description="Orações de A.A." />
-            <Label Text="As orações que acompanham a jornada de recuperação"
+                   SemanticProperties.Description="Meditações" />
+            <Label Text="Pausas para respirar e voltar ao centro"
                    Style="{StaticResource MutedText}"
                    Margin="0,0,0,20"
-                   SemanticProperties.Description="As orações que acompanham a jornada de recuperação" />
+                   SemanticProperties.Description="Pausas para respirar e voltar ao centro" />
 
             <!-- Cards de Oração -->
             <CollectionView ItemsSource="{Binding Prayers}"
                             SelectionMode="None"
-                            SemanticProperties.Description="Lista de orações">
+                            SemanticProperties.Description="Lista de meditações">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:PrayerItem">
                         <Frame Style="{StaticResource CardFrame}"
                                Margin="0,0,0,16"
-                               SemanticProperties.Description="{Binding Name, StringFormat='Oração: {0}'}">
+                               SemanticProperties.Description="{Binding Name, StringFormat='Meditação: {0}'}">
 
                             <VerticalStackLayout Spacing="12">
 
@@ -53,7 +53,7 @@
                                         HorizontalOptions="End"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PrayersViewModel}}, Path=CopyPrayerCommand}"
                                         CommandParameter="{Binding .}"
-                                        SemanticProperties.Description="{Binding Name, StringFormat='Copiar oração {0} para a área de transferência'}" />
+                                        SemanticProperties.Description="{Binding Name, StringFormat='Copiar meditação {0} para a área de transferência'}" />
 
                             </VerticalStackLayout>
                         </Frame>

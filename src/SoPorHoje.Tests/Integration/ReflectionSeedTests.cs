@@ -6,10 +6,13 @@ using SoPorHoje.Tests.Helpers;
 namespace SoPorHoje.Tests.Integration;
 
 /// <summary>
-/// Integration tests for the reflection seeding pipeline using the real JSON data file.
+/// Integration tests for the reflection seeding pipeline using the project's own
+/// authored sample content (CC BY-SA 4.0) — no third-party/protected text.
 /// </summary>
 public class ReflectionSeedTests : IAsyncLifetime
 {
+    private const string FixtureName = "reflections-sample-pt-BR.json";
+
     private TestDatabase _db = null!;
     private ReflectionRepository _sut = null!;
 
@@ -22,53 +25,44 @@ public class ReflectionSeedTests : IAsyncLifetime
 
     public async Task DisposeAsync() => await _db.DisposeAsync();
 
-    [Fact]
-    public async Task SeedFromRealJson_Creates365Entries()
-    {
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "TestData", "daily_reflections_pt-br.json");
-        File.Exists(jsonPath).Should().BeTrue(
-            "the real reflection JSON file must exist in TestData");
+    private static string FixturePath =>
+        Path.Combine(AppContext.BaseDirectory, "TestData", FixtureName);
 
-        await using var stream = File.OpenRead(jsonPath);
+    [Fact]
+    public async Task SeedFromJson_CreatesEntries()
+    {
+        File.Exists(FixturePath).Should().BeTrue(
+            "the authored sample reflection JSON must be copied to TestData");
+
+        await using var stream = File.OpenRead(FixturePath);
         await _sut.SeedFromJsonAsync(stream);
 
         var count = await _sut.GetCountAsync();
-        count.Should().Be(365, "the reflection file should have exactly 365 entries");
+        count.Should().BeGreaterThanOrEqualTo(14, "the January sample batch has at least 14 entries");
     }
 
     [Fact]
-    public async Task SeedFromRealJson_AllDateKeysAreUniqueAndCorrectFormat()
+    public async Task SeedFromJson_AllDateKeysAreUniqueAndCorrectFormat()
     {
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "TestData", "daily_reflections_pt-br.json");
-        if (!File.Exists(jsonPath)) return;
-
-        await using var stream = File.OpenRead(jsonPath);
+        await using var stream = File.OpenRead(FixturePath);
         await _sut.SeedFromJsonAsync(stream);
 
-        var db = await _db.Database.GetConnectionAsync();
-        var reflections = await db.Table<SoPorHoje.Core.Models.DailyReflection>().ToListAsync();
+        var all = await _sut.GetAllAsync();
 
-        reflections.Should().HaveCount(365);
-
-        var dateKeys = reflections.Select(r => r.DateKey).ToList();
+        var dateKeys = all.Select(r => r.DateKey).ToList();
         dateKeys.Should().OnlyHaveUniqueItems("each DateKey must be unique");
         dateKeys.Should().AllSatisfy(key =>
             key.Should().MatchRegex(@"^\d{2}-\d{2}$", "DateKey must be in MM-dd format"));
     }
 
     [Fact]
-    public async Task SeedFromRealJson_NoFieldIsEmpty()
+    public async Task SeedFromJson_CoreFieldsAreNotEmpty()
     {
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "TestData", "daily_reflections_pt-br.json");
-        if (!File.Exists(jsonPath)) return;
-
-        await using var stream = File.OpenRead(jsonPath);
+        await using var stream = File.OpenRead(FixturePath);
         await _sut.SeedFromJsonAsync(stream);
 
-        var db = await _db.Database.GetConnectionAsync();
-        var reflections = await db.Table<SoPorHoje.Core.Models.DailyReflection>().ToListAsync();
-
-        reflections.Should().AllSatisfy(r =>
+        var all = await _sut.GetAllAsync();
+        all.Should().AllSatisfy(r =>
         {
             r.Title.Should().NotBeNullOrWhiteSpace($"Title is empty for DateKey {r.DateKey}");
             r.Quote.Should().NotBeNullOrWhiteSpace($"Quote is empty for DateKey {r.DateKey}");
@@ -77,33 +71,25 @@ public class ReflectionSeedTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task SeedFromRealJson_GetTodaysReflection_ReturnsCorrectEntry()
+    public async Task SeedFromJson_GetByDateKey_ReturnsKnownEntry()
     {
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "TestData", "daily_reflections_pt-br.json");
-        if (!File.Exists(jsonPath)) return;
-
-        await using var stream = File.OpenRead(jsonPath);
+        await using var stream = File.OpenRead(FixturePath);
         await _sut.SeedFromJsonAsync(stream);
 
-        var todayKey = DateTime.Now.ToString("MM-dd");
-        var result = await _sut.GetTodaysReflectionAsync();
-
-        result.Should().NotBeNull($"there should be a reflection for today's key '{todayKey}'");
-        result!.DateKey.Should().Be(todayKey);
+        var result = await _sut.GetByDateKeyAsync("01-01");
+        result.Should().NotBeNull("the sample batch includes 1 de janeiro");
+        result!.Title.Should().Be("Aceitação");
     }
 
     [Fact]
-    public async Task SeedFromRealJson_CalledTwice_DoesNotDuplicate()
+    public async Task SeedFromJson_CalledTwice_DoesNotDuplicate()
     {
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "TestData", "daily_reflections_pt-br.json");
-        if (!File.Exists(jsonPath)) return;
-
-        await using var stream1 = File.OpenRead(jsonPath);
-        await _sut.SeedFromJsonAsync(stream1);
+        await using (var stream1 = File.OpenRead(FixturePath))
+            await _sut.SeedFromJsonAsync(stream1);
         var count1 = await _sut.GetCountAsync();
 
-        await using var stream2 = File.OpenRead(jsonPath);
-        await _sut.SeedFromJsonAsync(stream2);
+        await using (var stream2 = File.OpenRead(FixturePath))
+            await _sut.SeedFromJsonAsync(stream2);
         var count2 = await _sut.GetCountAsync();
 
         count2.Should().Be(count1);

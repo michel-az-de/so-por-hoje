@@ -3,11 +3,10 @@ using SQLite;
 namespace SoPorHoje.Core.Models;
 
 /// <summary>
-/// Reflexão diária oficial do A.A. — 365 entradas, uma por dia.
-/// Seed via JSON com schema:
-/// { "date": "2025-01-01", "title": "...", "quote": "...", "text": "...", "content": "REFERÊNCIA" }
-/// O campo "date" mapeia para DateKey no formato "MM-dd" (ignorar ano).
-/// O campo "content" do JSON é a referência bibliográfica → mapeia para Reference.
+/// Reflexão diária — conteúdo original do projeto (CC BY-SA 4.0), uma por dia do ano.
+/// Semeada a partir de JSON com o schema de data/reflections/SCHEMA.md:
+/// { "date": "MM-DD", "title", "quote", "text", "theme", "license", "author" }.
+/// O campo "date" mapeia para DateKey no formato "MM-dd" (o ano é ignorado).
 /// </summary>
 public class DailyReflection
 {
@@ -18,14 +17,27 @@ public class DailyReflection
     [Indexed(Unique = true)]
     public string DateKey { get; set; } = string.Empty;
 
+    /// <summary>Tema curto da reflexão (ex: "Aceitação").</summary>
     public string Title { get; set; } = string.Empty;
 
-    /// <summary>Citação da literatura do A.A.</summary>
+    /// <summary>Frase curta de abertura — original ou de domínio público (com atribuição).</summary>
     public string Quote { get; set; } = string.Empty;
 
-    /// <summary>Texto reflexivo escrito por membros.</summary>
+    /// <summary>A reflexão do dia (tom acolhedor, 2 a 5 frases).</summary>
     public string Text { get; set; } = string.Empty;
 
-    /// <summary>Referência bibliográfica (ex: "ALCOÓLICOS ANÔNIMOS, p. 25").</summary>
+    /// <summary>Slug do tema para agrupar/buscar (ex: "aceitacao").</summary>
+    public string Theme { get; set; } = string.Empty;
+
+    /// <summary>Licença do conteúdo (ex: "CC-BY-SA-4.0").</summary>
+    public string License { get; set; } = string.Empty;
+
+    /// <summary>Autoria do conteúdo (ex: "Projeto Só Por Hoje").</summary>
+    public string Author { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Campo legado para atribuição de fonte de domínio público, quando aplicável.
+    /// Não é usado pelo schema atual de reflexões autorais.
+    /// </summary>
     public string Reference { get; set; } = string.Empty;
 }

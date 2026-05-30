@@ -11,6 +11,12 @@
        SemanticProperties.Description="Aplicativo Só Por Hoje">
 
     <TabBar>
+        <!-- Tab Hoje -->
+        <ShellContent Title="Hoje"
+                      ContentTemplate="{DataTemplate views:HomePage}"
+                      Route="home"
+                      SemanticProperties.Description="Tab Hoje — o seu dia" />
+
         <!-- Tab Reuniões -->
         <ShellContent Title="Reuniões"
                       Icon="tab_meetings.png"
@@ -23,7 +29,7 @@
                       Icon="tab_program.png"
                       ContentTemplate="{DataTemplate views:ProgramPage}"
                       Route="program"
-                      SemanticProperties.Description="Tab do Programa de A.A." />
+                      SemanticProperties.Description="Tab do Programa" />
     </TabBar>
 
 </Shell>

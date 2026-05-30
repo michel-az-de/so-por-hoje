@@ -2,7 +2,7 @@ using SoPorHoje.App.ViewModels;
 
 namespace SoPorHoje.App.Views;
 
-/// <summary>Os 12 Passos do A.A.</summary>
+/// <summary>A Trilha — princípios de recuperação.</summary>
 public partial class StepsPage : ContentPage
 {
     public StepsPage(StepsViewModel viewModel)

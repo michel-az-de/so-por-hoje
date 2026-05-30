@@ -2,7 +2,7 @@ using SoPorHoje.App.ViewModels;
 
 namespace SoPorHoje.App.Views;
 
-/// <summary>As 12 Tradições do A.A.</summary>
+/// <summary>Combinados — compromissos diários.</summary>
 public partial class TraditionsPage : ContentPage
 {
     public TraditionsPage(TraditionsViewModel viewModel)

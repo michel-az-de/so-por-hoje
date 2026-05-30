@@ -6,7 +6,7 @@
              x:DataType="vm:PromisesViewModel"
              Title="As Promessas"
              BackgroundColor="{StaticResource BgPrimary}"
-             SemanticProperties.Description="As Promessas de Alcoólicos Anônimos">
+             SemanticProperties.Description="As Promessas da recuperação">
 
     <ScrollView Style="{StaticResource PageScrollView}">
         <VerticalStackLayout Padding="16,12,16,32" Spacing="0">
@@ -16,17 +16,17 @@
                    Style="{StaticResource PageTitle}"
                    Margin="0,4,0,4"
                    SemanticProperties.HeadingLevel="Level1"
-                   SemanticProperties.Description="As Promessas de A.A." />
-            <Label Text="Se trabalharmos para isso, elas se materializarão."
+                   SemanticProperties.Description="As Promessas" />
+            <Label Text="O que a recuperação devolve, aos poucos."
                    Style="{StaticResource SerifText}"
                    FontAttributes="Italic"
                    Margin="0,0,0,20"
-                   SemanticProperties.Description="Se trabalharmos para isso, elas se materializarão." />
+                   SemanticProperties.Description="O que a recuperação devolve, aos poucos." />
 
             <!-- Lista de Promessas -->
             <CollectionView ItemsSource="{Binding Promises}"
                             SelectionMode="None"
-                            SemanticProperties.Description="Lista das Promessas de A.A.">
+                            SemanticProperties.Description="Lista das Promessas">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="x:String">
                         <Frame CornerRadius="12"

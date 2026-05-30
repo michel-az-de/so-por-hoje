@@ -5,28 +5,28 @@
              xmlns:controls="clr-namespace:SoPorHoje.App.Controls"
              x:Class="SoPorHoje.App.Views.TraditionsPage"
              x:DataType="vm:TraditionsViewModel"
-             Title="As 12 Tradições"
+             Title="Combinados"
              BackgroundColor="{StaticResource BgPrimary}"
-             SemanticProperties.Description="As 12 Tradições de Alcoólicos Anônimos">
+             SemanticProperties.Description="Combinados — acordos comigo mesmo">
 
     <ScrollView Style="{StaticResource PageScrollView}">
         <VerticalStackLayout Padding="16,12,16,32" Spacing="0">
 
             <!-- Header -->
-            <Label Text="As 12 Tradições"
+            <Label Text="Combinados"
                    Style="{StaticResource PageTitle}"
                    Margin="0,4,0,4"
                    SemanticProperties.HeadingLevel="Level1"
-                   SemanticProperties.Description="As 12 Tradições de A.A." />
-            <Label Text="Os princípios de unidade de Alcoólicos Anônimos"
+                   SemanticProperties.Description="Combinados" />
+            <Label Text="Acordos comigo mesmo, só por hoje"
                    Style="{StaticResource MutedText}"
                    Margin="0,0,0,20"
-                   SemanticProperties.Description="Os princípios de unidade de Alcoólicos Anônimos" />
+                   SemanticProperties.Description="Acordos comigo mesmo, só por hoje" />
 
-            <!-- Accordion de Tradições -->
+            <!-- Accordion de Combinados -->
             <CollectionView ItemsSource="{Binding Traditions}"
                             SelectionMode="None"
-                            SemanticProperties.Description="Lista das 12 Tradições">
+                            SemanticProperties.Description="Lista de combinados">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:TraditionItem">
                         <controls:AccordionItem

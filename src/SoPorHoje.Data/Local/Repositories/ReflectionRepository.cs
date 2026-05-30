@@ -61,11 +61,14 @@ public class ReflectionRepository : IReflectionRepository
 
             var reflections = entries.Select(e => new DailyReflection
             {
-                DateKey = DateTime.ParseExact(e.Date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture).ToString("MM-dd"),
+                DateKey = NormalizeDateKey(e.Date),
                 Title = e.Title ?? string.Empty,
                 Quote = e.Quote ?? string.Empty,
                 Text = e.Text ?? string.Empty,
-                Reference = e.Content ?? string.Empty,
+                Theme = e.Theme ?? string.Empty,
+                License = e.License ?? string.Empty,
+                Author = e.Author ?? string.Empty,
+                Reference = e.Content ?? e.Reference ?? string.Empty,
             }).ToList();
 
             await db.InsertAllAsync(reflections);
@@ -92,12 +95,41 @@ public class ReflectionRepository : IReflectionRepository
         }
     }
 
+    public async Task<List<DailyReflection>> GetAllAsync()
+    {
+        try
+        {
+            var db = await _database.GetConnectionAsync();
+            return await db.Table<DailyReflection>().OrderBy(r => r.DateKey).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to get all reflections");
+            throw;
+        }
+    }
+
+    private static string NormalizeDateKey(string raw)
+    {
+        var ci = System.Globalization.CultureInfo.InvariantCulture;
+        if (DateTime.TryParseExact(raw, "yyyy-MM-dd", ci, System.Globalization.DateTimeStyles.None, out var full))
+            return full.ToString("MM-dd");
+        if (DateTime.TryParseExact(raw, "MM-dd", ci, System.Globalization.DateTimeStyles.None, out var md))
+            return md.ToString("MM-dd");
+        return raw;
+    }
+
     private sealed class ReflectionJsonEntry
     {
         public string Date { get; set; } = string.Empty;
         public string? Title { get; set; }
         public string? Quote { get; set; }
         public string? Text { get; set; }
+        public string? Theme { get; set; }
+        public string? License { get; set; }
+        public string? Author { get; set; }
+        // Campos legados (schema antigo) — tolerados na leitura.
         public string? Content { get; set; }
+        public string? Reference { get; set; }
     }
 }

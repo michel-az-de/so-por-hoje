@@ -3,16 +3,16 @@ using SoPorHoje.App.Constants;
 
 namespace SoPorHoje.App.ViewModels;
 
-/// <summary>ViewModel dos 12 Passos.</summary>
+/// <summary>ViewModel da Trilha — princípios de recuperação.</summary>
 public partial class StepsViewModel : BaseViewModel
 {
     public ObservableCollection<StepItem> Steps { get; }
 
     public StepsViewModel()
     {
-        Title = "Os 12 Passos";
+        Title = "A Trilha";
         Steps = new ObservableCollection<StepItem>(
-            AAContent.TwelveSteps.Select((s, i) => new StepItem(i + 1, s.Title, s.Text)));
+            ProgramContent.Trilha.Select((s, i) => new StepItem(i + 1, s.Title, s.Text)));
     }
 }
 
@@ -28,7 +28,7 @@ public partial class StepItem : CommunityToolkit.Mvvm.ComponentModel.ObservableO
     public StepItem(int number, string title, string text)
     {
         Number = number;
-        Title = $"Passo {number} — {title}";
+        Title = $"{number}. {title}";
         Text = text;
     }
 }

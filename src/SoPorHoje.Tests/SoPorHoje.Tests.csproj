@@ -30,12 +30,11 @@
   <ItemGroup>
     <ProjectReference Include="../SoPorHoje.Core/SoPorHoje.Core.csproj" />
     <ProjectReference Include="../SoPorHoje.Data/SoPorHoje.Data.csproj" />
-    <ProjectReference Include="../SoPorHoje.Scraper/SoPorHoje.Scraper.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="TestData/**" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="../data/daily_reflections_pt-br.json" Link="TestData/daily_reflections_pt-br.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../data/reflections/pt-BR/01-janeiro.json" Link="TestData/reflections-sample-pt-BR.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 

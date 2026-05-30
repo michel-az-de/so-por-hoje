@@ -3,17 +3,17 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace SoPorHoje.App.ViewModels;
 
-/// <summary>Hub de Programa — 12 Passos, Tradições, Promessas, SPH, Orações, HALT.</summary>
+/// <summary>Hub de Programa — A Trilha, Combinados, As Promessas, Só Por Hoje, Meditações, HALT.</summary>
 public partial class ProgramViewModel : BaseViewModel
 {
     public ObservableCollection<ProgramSection> Sections { get; } = new()
     {
-        new("📖", "Os 12 Passos",      "Programa de recuperação",              "steps"),
-        new("📜", "As 12 Tradições",    "Princípios de unidade",                "traditions"),
-        new("🌟", "As Promessas",       "O que esperar da recuperação",         "promises"),
-        new("🌅", "Só Por Hoje",        "9 meditações diárias",                 "justfortoday"),
-        new("🙏", "Orações",            "Serenidade, 3º Passo, 7º Passo",       "prayers"),
-        new("🚦", "Check HALT",         "Fome, Raiva, Solidão, Cansaço",        "halt"),
+        new("📖", "A Trilha",     "Princípios para a recuperação",         "steps"),
+        new("🤝", "Combinados",   "Acordos comigo mesmo, só por hoje",     "traditions"),
+        new("🌟", "As Promessas", "O que a recuperação devolve",           "promises"),
+        new("🌅", "Só Por Hoje",  "Viver um dia de cada vez",              "justfortoday"),
+        new("🧘", "Meditações",   "Pausas para respirar e se reencontrar", "prayers"),
+        new("🚦", "Check HALT",   "Fome, Raiva, Solidão, Cansaço",         "halt"),
     };
 
     public ProgramViewModel()

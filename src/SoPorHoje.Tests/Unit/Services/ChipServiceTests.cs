@@ -107,4 +107,25 @@ public class ChipServiceTests : IAsyncLifetime
     {
         _sut.GetProgressToNext(7300).Should().Be(1.0);
     }
+
+    [Fact]
+    public async Task GetUncelebrated_FirstCall_ReturnsEarnedChips()
+    {
+        var uncelebrated = await _sut.GetUncelebratedAsync(90);
+
+        uncelebrated.Select(e => e.ChipRequiredDays)
+            .Should().BeEquivalentTo(new[] { 1, 90 },
+                "Amarela (1 dia) e Azul (90 dias) foram conquistadas e ainda não celebradas");
+    }
+
+    [Fact]
+    public async Task GetUncelebrated_AfterMarkingCelebrated_ExcludesThem()
+    {
+        await _sut.GetUncelebratedAsync(90);
+        await _sut.MarkCelebratedAsync(1);
+        await _sut.MarkCelebratedAsync(90);
+
+        var again = await _sut.GetUncelebratedAsync(90);
+        again.Should().BeEmpty();
+    }
 }

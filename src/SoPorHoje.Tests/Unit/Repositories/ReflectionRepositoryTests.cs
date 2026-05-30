@@ -24,9 +24,9 @@ public class ReflectionRepositoryTests : IAsyncLifetime
     {
         var json = """
             [
-              {"date":"2025-04-06","title":"ACEITAÇÃO","quote":"Citação teste.","text":"Texto teste.","content":"ALCOÓLICOS ANÔNIMOS, p. 1"},
-              {"date":"2025-04-07","title":"GRATIDÃO","quote":"Citação 2.","text":"Texto 2.","content":"DOZE PASSOS, p. 2"},
-              {"date":"2025-04-08","title":"HUMILDADE","quote":"Citação 3.","text":"Texto 3.","content":"VIVENDO SÓBRIO, p. 3"}
+              {"date":"2025-04-06","title":"Aceitação","quote":"Citação teste.","text":"Texto teste.","theme":"aceitacao","license":"CC-BY-SA-4.0","author":"Projeto Só Por Hoje"},
+              {"date":"2025-04-07","title":"Gratidão","quote":"Citação 2.","text":"Texto 2.","theme":"gratidao","license":"CC-BY-SA-4.0","author":"Projeto Só Por Hoje"},
+              {"date":"2025-04-08","title":"Humildade","quote":"Citação 3.","text":"Texto 3.","theme":"humildade","license":"CC-BY-SA-4.0","author":"Projeto Só Por Hoje"}
             ]
             """;
 
@@ -34,13 +34,20 @@ public class ReflectionRepositoryTests : IAsyncLifetime
 
         var count = await _sut.GetCountAsync();
         count.Should().Be(3);
+
+        // Metadados de licença/autoria/tema devem ser persistidos (atribuição CC BY-SA).
+        var first = await _sut.GetByDateKeyAsync("04-06");
+        first.Should().NotBeNull();
+        first!.Theme.Should().Be("aceitacao");
+        first.License.Should().Be("CC-BY-SA-4.0");
+        first.Author.Should().Be("Projeto Só Por Hoje");
     }
 
     [Fact]
     public async Task SeedFromJson_DoesNotDuplicateOnSecondCall()
     {
         var json = """
-            [{"date":"2025-01-01","title":"TÍTULO","quote":"Q","text":"T","content":"Ref"}]
+            [{"date":"2025-01-01","title":"Título","quote":"Q","text":"T","theme":"tema","license":"CC-BY-SA-4.0","author":"Projeto Só Por Hoje"}]
             """;
 
         var bytes = System.Text.Encoding.UTF8.GetBytes(json);

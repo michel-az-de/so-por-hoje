@@ -1,126 +1,80 @@
-# so-por-hoje
-Projeto para ajudar membros de Alcoólicos Anônimos em sua recuperação diária.
+# Só Por Hoje
+
+**Um companheiro diário, gratuito e offline, para quem está em recuperação — um dia de cada vez.**
+
+🌐 soporhoje.org · 📱 Android (iOS em breve) · 🆓 Código aberto · 🔒 Sem login, sem rastreadores
+
+---
 
 ## Sobre
 
-**Só Por Hoje** é um companheiro diário para membros de A.A. no Brasil. Este repositório contém o backend API REST em ASP.NET Core 8 com scraper de reuniões online.
+**Só Por Hoje** é um aplicativo independente de apoio à recuperação. Nasceu de uma
+jornada pessoal e está se tornando um projeto social, público e open source.
 
-## Estrutura
+> **Não é vinculado a A.A., N.A. ou qualquer outra organização.** É um espaço
+> próprio, livre e acolhedor, aberto a quem quiser usar e contribuir.
+
+A ideia é simples: focar em **hoje**. Acompanhar o seu tempo, registrar um
+compromisso diário, ler uma reflexão e ter ferramentas de apoio à mão quando o
+dia aperta.
+
+## Princípios
+
+- **Offline primeiro.** Funciona sem internet. Seus dados ficam no seu aparelho.
+- **Privacidade.** Sem e-mail, sem senha, sem dados pessoais, sem analytics de
+  terceiros. A identidade é um ID anônimo gerado no próprio aparelho.
+- **Gratuito e sem fins lucrativos.** Sem anúncios, sem cobrança.
+- **Aberto e colaborativo.** Qualquer pessoa pode contribuir com código ou conteúdo.
+
+## Funcionalidades
+
+Já no app:
+
+- 🚦 **Check HALT** — uma checagem rápida nos momentos difíceis (Fome, Raiva,
+  Solidão, Cansaço)
+- 🤝 **Grupos de apoio online** — encontre reuniões acontecendo agora
+
+Em construção (veja o roadmap):
+
+- ⏱️ Contador de tempo de recuperação
+- 🌅 Reflexão do dia
+- ✍️ Compromisso diário ("só por hoje, eu...")
+- 🏅 Marcos de tempo
+- 📓 Histórico e diário pessoal
+
+## Como contribuir
+
+Este é um projeto comunitário — toda ajuda é bem-vinda:
+
+- **Código:** abra uma issue ou um Pull Request.
+- **Reflexões diárias:** contribua com textos **originais** seguindo
+  [`data/reflections/SCHEMA.md`](data/reflections/SCHEMA.md). Veja as regras de
+  conteúdo lá (apenas material original ou de domínio público).
+
+Um guia completo de contribuição (`CONTRIBUTING.md`) e o código de conduta estão
+a caminho.
+
+## Estrutura do repositório
 
 ```
 src/
-├── SoPorHoje.Api/       # API REST (ASP.NET Core 8 Minimal API + EF Core + PostgreSQL)
-├── SoPorHoje.Scraper/   # Scraper de reuniões (intergrupos-aa.org.br)
-└── data/
-    └── daily_reflections_pt-br.json   # 365 reflexões diárias em português
+├── SoPorHoje.App/      # App mobile (.NET MAUI) — Android (iOS em breve)
+├── SoPorHoje.Core/     # Modelos de domínio (sobriedade, fichas, reflexões)
+├── SoPorHoje.Data/     # Camada de dados offline-first (SQLite)
+├── SoPorHoje.Api/      # API/back-end (opcional, em revisão de arquitetura)
+├── SoPorHoje.Scraper/  # Coletor de reuniões online
+└── SoPorHoje.Tests/    # Testes + auditoria de acessibilidade (WCAG)
+data/
+└── reflections/        # Reflexões diárias (conteúdo aberto, CC BY-SA)
 ```
 
-## Setup Rápido com Docker
+## Licença
 
-```bash
-cd src
-docker-compose -f SoPorHoje.Api/docker-compose.yml up --build
-```
+Licenciamento dividido entre código e conteúdo:
 
-A API estará disponível em `http://localhost:5000`.  
-Swagger UI em `http://localhost:5000/swagger`.
+- **Código-fonte:** [MIT](LICENSE)
+- **Conteúdo** (reflexões, textos): [CC BY-SA 4.0](CONTENT_LICENSE)
 
-## Setup para Desenvolvimento Local
+---
 
-**Pré-requisitos:** .NET 8 SDK, PostgreSQL 16
-
-```bash
-# 1. Criar banco de dados
-createdb soporhoje
-
-# 2. Aplicar migrations
-cd src/SoPorHoje.Api
-dotnet ef database update
-
-# 3. Rodar a API
-dotnet run
-```
-
-## Endpoints da API
-
-### Autenticação Anônima
-
-```bash
-# Criar/recuperar usuário anônimo pelo deviceId
-curl -X POST http://localhost:5000/api/auth/anonymous \
-  -H "Content-Type: application/json" \
-  -d '{"deviceId": "meu-device-uuid-123"}'
-# Resposta: {"userId": "...", "isNew": true}
-```
-
-### Sincronização
-
-```bash
-# Push — enviar dados do app para o servidor
-curl -X POST http://localhost:5000/api/sync/push \
-  -H "Content-Type: application/json" \
-  -d '{
-    "deviceId": "meu-device-uuid-123",
-    "profile": {
-      "sobrietyDate": "2024-06-15",
-      "personalReason": "Pela minha família"
-    },
-    "pledges": [
-      {"pledgeDate": "2026-04-06", "pledgedAt": "2026-04-06T08:30:00Z", "fulfilled": null}
-    ],
-    "chipEvents": [],
-    "resetEvents": []
-  }'
-
-# Pull — buscar dados atualizados desde um timestamp
-curl "http://localhost:5000/api/sync/pull?since=2026-01-01T00:00:00Z"
-```
-
-### Reuniões
-
-```bash
-# Todas as reuniões ativas
-curl http://localhost:5000/api/meetings
-
-# Reuniões acontecendo agora (horário de Brasília)
-curl http://localhost:5000/api/meetings/live
-```
-
-### Reflexões
-
-```bash
-# Reflexão do dia (horário de Brasília)
-curl http://localhost:5000/api/reflections/today
-
-# Lista paginada (seed completo para o app)
-curl "http://localhost:5000/api/reflections?page=1&pageSize=50"
-```
-
-### Administração
-
-```bash
-# Health check
-curl http://localhost:5000/api/health
-
-# Deletar todos os dados de um usuário (GDPR)
-curl -X DELETE http://localhost:5000/api/users/meu-device-uuid-123
-```
-
-## Privacidade
-
-- IDs de usuário são UUIDs anônimos gerados no device — sem email/senha
-- Nenhum dado pessoal identificável é coletado
-- Delete permanente disponível via `DELETE /api/users/{deviceId}`
-- Sem analytics de terceiros
-
-## Scraper de Reuniões
-
-O scraper coleta reuniões do site intergrupos-aa.org.br a cada 30 minutos:
-
-1. Tenta endpoints de API JSON internos do site
-2. Fallback: scraping HTML com HtmlAgilityPack
-3. Rate limit: máximo 1 request a cada 10 segundos
-4. Retorna lista vazia se o site estiver indisponível (nunca crasha)
-
-Ver [SoPorHoje.Scraper/README.md](src/SoPorHoje.Scraper/README.md) para mais detalhes.
-
+*Só por hoje.*

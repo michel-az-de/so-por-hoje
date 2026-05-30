@@ -11,7 +11,7 @@
 
     <!-- App Info -->
     <ApplicationTitle>Só Por Hoje</ApplicationTitle>
-    <ApplicationId>br.org.aa.soporhoje</ApplicationId>
+    <ApplicationId>org.soporhoje.app</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 
@@ -37,11 +37,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AndroidResource Remove="Platforms\Android\Resources\values\colors.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SoPorHoje.Core\SoPorHoje.Core.csproj" />
+    <ProjectReference Include="..\SoPorHoje.Data\SoPorHoje.Data.csproj" />
   </ItemGroup>
 
 </Project>

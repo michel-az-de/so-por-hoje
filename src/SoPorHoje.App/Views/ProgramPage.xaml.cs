@@ -2,7 +2,7 @@ using SoPorHoje.App.ViewModels;
 
 namespace SoPorHoje.App.Views;
 
-/// <summary>Hub do Programa de A.A.</summary>
+/// <summary>Hub do Programa de recuperação.</summary>
 public partial class ProgramPage : ContentPage
 {
     public ProgramPage(ProgramViewModel viewModel)

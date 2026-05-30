@@ -5,6 +5,8 @@ using SoPorHoje.App.Interfaces;
 using SoPorHoje.App.Services;
 using SoPorHoje.App.ViewModels;
 using SoPorHoje.App.Views;
+using SoPorHoje.Data.Local;
+using SoPorHoje.Data.Local.Repositories;
 
 namespace SoPorHoje.App;
 
@@ -12,6 +14,10 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
+        // Garante o provedor nativo do SQLite registrado antes de qualquer acesso ao banco
+        // (importante em builds Android/Release com linker agressivo).
+        SQLitePCL.Batteries_V2.Init();
+
         var builder = MauiApp.CreateBuilder();
 
         builder
@@ -28,7 +34,17 @@ public static class MauiProgram
         // ── Services ──────────────────────────────────────────────────────────
         builder.Services.AddSingleton<IMeetingRepository, InMemoryMeetingRepository>();
 
+        // ── Dados offline-first (SQLite) ──────────────────────────────────────
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "soporhoje.db3");
+        builder.Services.AddSingleton(sp =>
+            new SoPorHojeDatabase(dbPath, sp.GetRequiredService<ILogger<SoPorHojeDatabase>>()));
+        builder.Services.AddSingleton<SoPorHoje.Core.Interfaces.IUserRepository, UserRepository>();
+        builder.Services.AddSingleton<SoPorHoje.Core.Interfaces.IPledgeRepository, PledgeRepository>();
+        builder.Services.AddSingleton<SoPorHoje.Core.Interfaces.IReflectionRepository, ReflectionRepository>();
+        builder.Services.AddSingleton<SoPorHoje.Core.Interfaces.IChipService, ChipService>();
+
         // ── ViewModels ────────────────────────────────────────────────────────
+        builder.Services.AddTransient<HomeViewModel>();
         builder.Services.AddTransient<MeetingsViewModel>();
         builder.Services.AddTransient<ProgramViewModel>();
         builder.Services.AddTransient<StepsViewModel>();
@@ -39,6 +55,7 @@ public static class MauiProgram
         builder.Services.AddTransient<HaltCheckViewModel>();
 
         // ── Views ─────────────────────────────────────────────────────────────
+        builder.Services.AddTransient<HomePage>();
         builder.Services.AddTransient<MeetingsPage>();
         builder.Services.AddTransient<ProgramPage>();
         builder.Services.AddTransient<StepsPage>();
@@ -48,10 +65,7 @@ public static class MauiProgram
         builder.Services.AddTransient<PrayersPage>();
         builder.Services.AddTransient<HaltCheckPage>();
 
-        // ── Shell ─────────────────────────────────────────────────────────────
-        builder.Services.AddSingleton<AppShell>();
-
-#if DEBUG
+        #if DEBUG
         builder.Logging.AddDebug();
 #endif
 

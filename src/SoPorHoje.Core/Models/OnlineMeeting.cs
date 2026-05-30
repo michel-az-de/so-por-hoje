@@ -20,7 +20,7 @@ public class OnlineMeeting
 
     public string MeetingUrl { get; set; } = string.Empty;
     public string Platform { get; set; } = string.Empty;
-    public string Source { get; set; } = "intergrupos-aa.org.br";
+    public string Source { get; set; } = "comunidade";
     public DateTime LastScrapedAt { get; set; }
 
     [Ignore]

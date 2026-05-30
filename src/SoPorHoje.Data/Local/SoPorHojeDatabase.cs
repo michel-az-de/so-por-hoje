@@ -9,6 +9,7 @@ public class SoPorHojeDatabase
 {
     private readonly SQLiteAsyncConnection _db;
     private readonly ILogger<SoPorHojeDatabase> _logger;
+    private readonly SemaphoreSlim _initLock = new(1, 1);
     private bool _initialized;
 
     public SoPorHojeDatabase(string dbPath, ILogger<SoPorHojeDatabase> logger)
@@ -27,8 +28,11 @@ public class SoPorHojeDatabase
     {
         if (_initialized) return;
 
+        await _initLock.WaitAsync();
         try
         {
+            if (_initialized) return;
+
             await _db.CreateTableAsync<UserProfile>();
             await _db.CreateTableAsync<DailyPledge>();
             await _db.CreateTableAsync<DailyReflection>();
@@ -44,6 +48,10 @@ public class SoPorHojeDatabase
         {
             _logger.LogError(ex, "Failed to initialize database");
             throw;
+        }
+        finally
+        {
+            _initLock.Release();
         }
     }
 
