@@ -5,7 +5,7 @@
              x:Class="SoPorHoje.App.Views.ProgramPage"
              x:DataType="vm:ProgramViewModel"
              Title="Programa"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="Hub do Programa de recuperação">
 
     <ScrollView Style="{StaticResource PageScrollView}">

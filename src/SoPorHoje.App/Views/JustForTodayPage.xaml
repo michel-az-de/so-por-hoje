@@ -5,7 +5,7 @@
              x:Class="SoPorHoje.App.Views.JustForTodayPage"
              x:DataType="vm:JustForTodayViewModel"
              Title="Só Por Hoje"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="Meditações Só Por Hoje">
 
     <ScrollView Style="{StaticResource PageScrollView}">

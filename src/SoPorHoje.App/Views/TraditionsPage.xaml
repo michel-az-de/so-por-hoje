@@ -6,7 +6,7 @@
              x:Class="SoPorHoje.App.Views.TraditionsPage"
              x:DataType="vm:TraditionsViewModel"
              Title="Combinados"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="Combinados — acordos comigo mesmo">
 
     <ScrollView Style="{StaticResource PageScrollView}">

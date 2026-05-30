@@ -18,5 +18,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("justfortoday", typeof(JustForTodayPage));
         Routing.RegisterRoute("prayers",     typeof(PrayersPage));
         Routing.RegisterRoute("halt",        typeof(HaltCheckPage));
+        Routing.RegisterRoute("milestones",  typeof(MilestonesPage));
+        Routing.RegisterRoute("history",     typeof(HistoryPage));
     }
 }

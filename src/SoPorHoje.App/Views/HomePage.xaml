@@ -5,7 +5,7 @@
              x:Class="SoPorHoje.App.Views.HomePage"
              x:DataType="vm:HomeViewModel"
              Title="Hoje"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="Tela inicial — o seu dia de hoje">
 
     <ScrollView Style="{StaticResource PageScrollView}">
@@ -42,7 +42,7 @@
                                SemanticProperties.HeadingLevel="Level2" />
                         <Frame Padding="8,0"
                                BorderColor="{StaticResource BorderLight}"
-                               BackgroundColor="{StaticResource BgCard}"
+                               BackgroundColor="{AppThemeBinding Light={StaticResource BgCard}, Dark={StaticResource BgCardDark}}"
                                CornerRadius="8"
                                HasShadow="False">
                             <Editor Text="{Binding OnboardingReason}"
@@ -114,7 +114,7 @@
                         SemanticProperties.Description="Registrar o meu compromisso de hoje" />
                 <Frame Style="{StaticResource CardFrame}"
                        IsVisible="{Binding HasPledgedToday}"
-                       BackgroundColor="{StaticResource SuccessLight}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource SuccessLight}, Dark={StaticResource SuccessLightDark}}"
                        BorderColor="{StaticResource Success}">
                     <Label Text="✓  Você fez o seu combinado de hoje. Só por hoje."
                            Style="{StaticResource BodyText}"
@@ -144,6 +144,29 @@
                         <Label Text="{Binding PersonalReason}" Style="{StaticResource SerifText}" FontAttributes="Italic" />
                     </VerticalStackLayout>
                 </Frame>
+
+                <!-- Atalhos -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,4,0,0">
+                    <Button Grid.Column="0"
+                            Text="🏅  Marcos"
+                            Style="{StaticResource OutlineButton}"
+                            Command="{Binding OpenMilestonesCommand}"
+                            SemanticProperties.Description="Ver todos os marcos" />
+                    <Button Grid.Column="1"
+                            Text="📓  Histórico"
+                            Style="{StaticResource OutlineButton}"
+                            Command="{Binding OpenHistoryCommand}"
+                            SemanticProperties.Description="Ver o meu histórico" />
+                </Grid>
+
+                <!-- Recomecei hoje -->
+                <Button Text="Recomecei hoje"
+                        Style="{StaticResource OutlineButton}"
+                        Command="{Binding RestartTodayCommand}"
+                        BorderColor="{StaticResource BorderMedium}"
+                        TextColor="{StaticResource TextSecondary}"
+                        Margin="0,2,0,0"
+                        SemanticProperties.Description="Recomeçar a contagem a partir de hoje" />
 
             </VerticalStackLayout>
 

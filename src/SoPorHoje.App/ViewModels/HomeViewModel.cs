@@ -181,4 +181,27 @@ public partial class HomeViewModel : BaseViewModel
         });
         HasPledgedToday = true;
     });
+
+    [RelayCommand]
+    private static Task OpenMilestonesAsync() => Shell.Current.GoToAsync("milestones");
+
+    [RelayCommand]
+    private static Task OpenHistoryAsync() => Shell.Current.GoToAsync("history");
+
+    [RelayCommand]
+    private Task RestartTodayAsync() => RunSafeAsync(async () =>
+    {
+        if (Shell.Current is not { } shell) return;
+
+        var confirm = await shell.DisplayAlert(
+            "Recomeçar hoje?",
+            "A contagem passa a contar a partir de hoje. Recomeçar faz parte do caminho — o seu histórico continua guardado.",
+            "Recomecei hoje",
+            "Agora não");
+
+        if (!confirm) return;
+
+        await _users.ResetSobrietyAsync(DateTime.Today);
+        await LoadAsync();
+    });
 }

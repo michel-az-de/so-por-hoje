@@ -53,6 +53,8 @@ public static class MauiProgram
         builder.Services.AddTransient<JustForTodayViewModel>();
         builder.Services.AddTransient<PrayersViewModel>();
         builder.Services.AddTransient<HaltCheckViewModel>();
+        builder.Services.AddTransient<MilestonesViewModel>();
+        builder.Services.AddTransient<HistoryViewModel>();
 
         // ── Views ─────────────────────────────────────────────────────────────
         builder.Services.AddTransient<HomePage>();
@@ -64,6 +66,8 @@ public static class MauiProgram
         builder.Services.AddTransient<JustForTodayPage>();
         builder.Services.AddTransient<PrayersPage>();
         builder.Services.AddTransient<HaltCheckPage>();
+        builder.Services.AddTransient<MilestonesPage>();
+        builder.Services.AddTransient<HistoryPage>();
 
         #if DEBUG
         builder.Logging.AddDebug();

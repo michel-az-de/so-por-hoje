@@ -5,7 +5,7 @@
              x:Class="SoPorHoje.App.Views.HaltCheckPage"
              x:DataType="vm:HaltCheckViewModel"
              Title="Check HALT"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="Ferramenta Check HALT — Fome, Raiva, Solidão, Cansaço">
 
     <ScrollView Style="{StaticResource PageScrollView}">
@@ -34,8 +34,8 @@
                        Padding="0"
                        IsClippedToBounds="True"
                        HasShadow="True"
-                       BackgroundColor="{StaticResource BgSurface}"
-                       BorderColor="{StaticResource BorderLight}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}"
+                       BorderColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderLightDark}}"
                        SemanticProperties.Description="{Binding Items[0].AccessibilityDescription}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnHaltCardTapped"
@@ -87,8 +87,8 @@
                        Padding="0"
                        IsClippedToBounds="True"
                        HasShadow="True"
-                       BackgroundColor="{StaticResource BgSurface}"
-                       BorderColor="{StaticResource BorderLight}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}"
+                       BorderColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderLightDark}}"
                        SemanticProperties.Description="{Binding Items[1].AccessibilityDescription}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnHaltCardTapped"
@@ -138,8 +138,8 @@
                        Padding="0"
                        IsClippedToBounds="True"
                        HasShadow="True"
-                       BackgroundColor="{StaticResource BgSurface}"
-                       BorderColor="{StaticResource BorderLight}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}"
+                       BorderColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderLightDark}}"
                        SemanticProperties.Description="{Binding Items[2].AccessibilityDescription}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnHaltCardTapped"
@@ -189,8 +189,8 @@
                        Padding="0"
                        IsClippedToBounds="True"
                        HasShadow="True"
-                       BackgroundColor="{StaticResource BgSurface}"
-                       BorderColor="{StaticResource BorderLight}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}"
+                       BorderColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderLightDark}}"
                        SemanticProperties.Description="{Binding Items[3].AccessibilityDescription}">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnHaltCardTapped"

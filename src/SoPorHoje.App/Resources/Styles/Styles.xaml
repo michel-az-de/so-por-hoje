@@ -8,27 +8,27 @@
         <Setter Property="FontFamily" Value="DMSans" />
         <Setter Property="FontSize" Value="26" />
         <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
     </Style>
 
     <Style x:Key="SectionLabel" TargetType="Label">
         <Setter Property="FontFamily" Value="DMSans" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontAttributes" Value="Bold" />
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
     </Style>
 
     <Style x:Key="BodyText" TargetType="Label">
         <Setter Property="FontFamily" Value="DMSans" />
         <Setter Property="FontSize" Value="15" />
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
         <Setter Property="LineBreakMode" Value="WordWrap" />
     </Style>
 
     <Style x:Key="SerifText" TargetType="Label">
         <Setter Property="FontFamily" Value="SourceSerif4" />
         <Setter Property="FontSize" Value="15" />
-        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
         <Setter Property="LineBreakMode" Value="WordWrap" />
         <Setter Property="LineHeight" Value="1.6" />
     </Style>
@@ -36,27 +36,27 @@
     <Style x:Key="MutedText" TargetType="Label">
         <Setter Property="FontFamily" Value="DMSans" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="TextColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextMuted}, Dark={StaticResource TextMutedDark}}" />
     </Style>
 
     <Style x:Key="CaptionText" TargetType="Label">
         <Setter Property="FontFamily" Value="DMSans" />
         <Setter Property="FontSize" Value="12" />
-        <Setter Property="TextColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextMuted}, Dark={StaticResource TextMutedDark}}" />
     </Style>
 
     <!-- ======================== CARDS ======================== -->
 
     <Style x:Key="CardFrame" TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="{StaticResource BgSurface}" />
-        <Setter Property="BorderColor" Value="{StaticResource BorderLight}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderLightDark}}" />
         <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Padding" Value="16" />
         <Setter Property="HasShadow" Value="True" />
     </Style>
 
     <Style x:Key="LiveCardFrame" TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="{StaticResource SuccessLight}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SuccessLight}, Dark={StaticResource SuccessLightDark}}" />
         <Setter Property="BorderColor" Value="{StaticResource Success}" />
         <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Padding" Value="16" />
@@ -64,8 +64,8 @@
     </Style>
 
     <Style x:Key="HubCardFrame" TargetType="Frame">
-        <Setter Property="BackgroundColor" Value="{StaticResource BgSurface}" />
-        <Setter Property="BorderColor" Value="{StaticResource BorderLight}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderLightDark}}" />
         <Setter Property="CornerRadius" Value="14" />
         <Setter Property="Padding" Value="20,16" />
         <Setter Property="HasShadow" Value="True" />
@@ -108,8 +108,8 @@
 
     <Style x:Key="OutlineButton" TargetType="Button">
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="TextColor" Value="{StaticResource Accent}" />
-        <Setter Property="BorderColor" Value="{StaticResource Accent}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource AccentDark}}" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource AccentDark}}" />
         <Setter Property="BorderWidth" Value="1.5" />
         <Setter Property="FontFamily" Value="DMSans" />
         <Setter Property="FontSize" Value="14" />
@@ -123,18 +123,18 @@
     <Style x:Key="LinkLabel" TargetType="Label">
         <Setter Property="FontFamily" Value="DMSans" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="TextColor" Value="{StaticResource Accent}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource AccentDark}}" />
         <Setter Property="TextDecorations" Value="Underline" />
     </Style>
 
     <!-- ======================== PAGE CONTAINER ======================== -->
 
     <Style x:Key="PageScrollView" TargetType="ScrollView">
-        <Setter Property="BackgroundColor" Value="{StaticResource BgPrimary}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}" />
     </Style>
 
     <Style x:Key="ContentPage" TargetType="ContentPage">
-        <Setter Property="BackgroundColor" Value="{StaticResource BgPrimary}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}" />
     </Style>
 
 </ResourceDictionary>

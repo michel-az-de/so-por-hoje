@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SoPorHoje.App.ViewModels"
+             x:Class="SoPorHoje.App.Views.HistoryPage"
+             x:DataType="vm:HistoryViewModel"
+             Title="Histórico"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
+             SemanticProperties.Description="Tela de Histórico — combinados e estatísticas">
+
+    <ScrollView Style="{StaticResource PageScrollView}">
+        <VerticalStackLayout Padding="16,12,16,32" Spacing="0">
+
+            <Label Text="Histórico"
+                   Style="{StaticResource PageTitle}"
+                   Margin="0,4,0,4"
+                   SemanticProperties.HeadingLevel="Level1"
+                   SemanticProperties.Description="Histórico" />
+            <Label Text="O seu caminho, um dia de cada vez"
+                   Style="{StaticResource MutedText}"
+                   Margin="0,0,0,16" />
+
+            <!-- Estatísticas -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="0,0,0,20">
+                <Frame Grid.Column="0" Style="{StaticResource CardFrame}" Padding="10,14">
+                    <VerticalStackLayout Spacing="2" HorizontalOptions="Center"
+                                         SemanticProperties.Description="{Binding SoberDaysText, StringFormat='{0} de recuperação'}">
+                        <Label Text="{Binding SoberDaysText}"
+                               FontFamily="DMSans" FontSize="18" FontAttributes="Bold"
+                               TextColor="{StaticResource Accent}" HorizontalOptions="Center" />
+                        <Label Text="recuperação" Style="{StaticResource CaptionText}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="1" Style="{StaticResource CardFrame}" Padding="10,14">
+                    <VerticalStackLayout Spacing="2" HorizontalOptions="Center"
+                                         SemanticProperties.Description="{Binding StreakText, StringFormat='sequência de {0}'}">
+                        <Label Text="{Binding StreakText}"
+                               FontFamily="DMSans" FontSize="18" FontAttributes="Bold"
+                               TextColor="{StaticResource Warm}" HorizontalOptions="Center" />
+                        <Label Text="seguidos" Style="{StaticResource CaptionText}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="2" Style="{StaticResource CardFrame}" Padding="10,14">
+                    <VerticalStackLayout Spacing="2" HorizontalOptions="Center"
+                                         SemanticProperties.Description="{Binding TotalText}">
+                        <Label Text="{Binding TotalText}"
+                               FontFamily="DMSans" FontSize="18" FontAttributes="Bold"
+                               TextColor="{StaticResource Success}" HorizontalOptions="Center" />
+                        <Label Text="no total" Style="{StaticResource CaptionText}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <Label Text="Combinados"
+                   Style="{StaticResource SectionLabel}"
+                   Margin="0,4,0,12"
+                   SemanticProperties.HeadingLevel="Level2"
+                   SemanticProperties.Description="Combinados cumpridos" />
+
+            <!-- Lista -->
+            <CollectionView ItemsSource="{Binding Pledges}"
+                            SelectionMode="None"
+                            IsVisible="{Binding HasPledges}"
+                            SemanticProperties.Description="Lista de combinados cumpridos">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PledgeHistoryItem">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Padding="4,10" MinimumHeightRequest="44">
+                            <Label Grid.Column="0" Text="✓" FontSize="16"
+                                   TextColor="{StaticResource Success}" VerticalOptions="Center"
+                                   SemanticProperties.Description="" />
+                            <Label Grid.Column="1" Text="{Binding Label}"
+                                   Style="{StaticResource BodyText}" VerticalOptions="Center" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Estado vazio -->
+            <VerticalStackLayout IsVisible="{Binding IsEmpty}"
+                                 HorizontalOptions="Center"
+                                 Margin="0,24,0,0"
+                                 Spacing="8">
+                <Label Text="🌱" FontSize="44" HorizontalOptions="Center" SemanticProperties.Description="" />
+                <Label Text="Você ainda não registrou combinados. Comece pelo de hoje, na tela inicial."
+                       Style="{StaticResource MutedText}"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

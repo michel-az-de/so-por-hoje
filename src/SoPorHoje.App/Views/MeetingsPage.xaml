@@ -6,7 +6,7 @@
              x:Class="SoPorHoje.App.Views.MeetingsPage"
              x:DataType="vm:MeetingsViewModel"
              Title="Reuniões"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="Tela de reuniões online de apoio">
 
     <ContentPage.Resources>

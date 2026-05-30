@@ -6,7 +6,7 @@
              x:Class="SoPorHoje.App.Views.StepsPage"
              x:DataType="vm:StepsViewModel"
              Title="A Trilha"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="A Trilha — princípios de recuperação">
 
     <ScrollView Style="{StaticResource PageScrollView}">

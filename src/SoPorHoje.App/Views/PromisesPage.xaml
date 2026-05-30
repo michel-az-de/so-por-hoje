@@ -5,7 +5,7 @@
              x:Class="SoPorHoje.App.Views.PromisesPage"
              x:DataType="vm:PromisesViewModel"
              Title="As Promessas"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="As Promessas da recuperação">
 
     <ScrollView Style="{StaticResource PageScrollView}">
@@ -33,8 +33,8 @@
                                Padding="0"
                                HasShadow="True"
                                Margin="0,0,0,10"
-                               BorderColor="{StaticResource BorderLight}"
-                               BackgroundColor="{StaticResource BgSurface}"
+                               BorderColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderLightDark}}"
+                               BackgroundColor="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}"
                                SemanticProperties.Description="{Binding .}">
                             <Grid ColumnDefinitions="6,*" ColumnSpacing="0">
 

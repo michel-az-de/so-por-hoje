@@ -5,7 +5,7 @@
              x:Class="SoPorHoje.App.Views.PrayersPage"
              x:DataType="vm:PrayersViewModel"
              Title="Meditações"
-             BackgroundColor="{StaticResource BgPrimary}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BgPrimary}, Dark={StaticResource BgPrimaryDark}}"
              SemanticProperties.Description="Meditações">
 
     <ScrollView Style="{StaticResource PageScrollView}">

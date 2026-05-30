@@ -4,10 +4,10 @@
        xmlns:views="clr-namespace:SoPorHoje.App.Views"
        x:Class="SoPorHoje.App.AppShell"
        Shell.NavBarHasShadow="True"
-       Shell.TabBarBackgroundColor="{StaticResource BgSurface}"
-       Shell.TabBarTitleColor="{StaticResource Accent}"
-       Shell.TabBarUnselectedColor="{StaticResource TextMuted}"
-       Shell.BackgroundColor="{StaticResource BgSurface}"
+       Shell.TabBarBackgroundColor="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}"
+       Shell.TabBarTitleColor="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource AccentDark}}"
+       Shell.TabBarUnselectedColor="{AppThemeBinding Light={StaticResource TextMuted}, Dark={StaticResource TextMutedDark}}"
+       Shell.BackgroundColor="{AppThemeBinding Light={StaticResource BgSurface}, Dark={StaticResource BgSurfaceDark}}"
        SemanticProperties.Description="Aplicativo Só Por Hoje">
 
     <TabBar>
