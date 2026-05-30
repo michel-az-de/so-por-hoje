@@ -30,17 +30,19 @@ dia aperta.
 
 Já no app:
 
+- 🌅 **Hoje** — contador de tempo de recuperação, ficha/marco atual com
+  progresso, reflexão do dia e o compromisso diário ("só por hoje, eu...")
 - 🚦 **Check HALT** — uma checagem rápida nos momentos difíceis (Fome, Raiva,
   Solidão, Cansaço)
-- 🤝 **Grupos de apoio online** — encontre reuniões acontecendo agora
+- 📖 **A Trilha** — princípios, combinados, promessas e meditações (conteúdo original)
+- 🤝 **Apoio** — reuniões abertas e recursos de crise (CVV 188)
 
 Em construção (veja o roadmap):
 
-- ⏱️ Contador de tempo de recuperação
-- 🌅 Reflexão do dia
-- ✍️ Compromisso diário ("só por hoje, eu...")
-- 🏅 Marcos de tempo
-- 📓 Histórico e diário pessoal
+- 🏅 Tela de marcos e histórico
+- 📓 Diário pessoal
+- 🔁 Botão "recomecei hoje"
+- 🌙 Modo escuro
 
 ## Como contribuir
 
@@ -51,8 +53,9 @@ Este é um projeto comunitário — toda ajuda é bem-vinda:
   [`data/reflections/SCHEMA.md`](data/reflections/SCHEMA.md). Veja as regras de
   conteúdo lá (apenas material original ou de domínio público).
 
-Um guia completo de contribuição (`CONTRIBUTING.md`) e o código de conduta estão
-a caminho.
+Veja o guia completo em [`CONTRIBUTING.md`](CONTRIBUTING.md) e o
+[Código de Conduta](CODE_OF_CONDUCT.md). Para relatar falhas de segurança,
+consulte a [Política de Segurança](SECURITY.md).
 
 ## Estrutura do repositório
 
@@ -61,11 +64,10 @@ src/
 ├── SoPorHoje.App/      # App mobile (.NET MAUI) — Android (iOS em breve)
 ├── SoPorHoje.Core/     # Modelos de domínio (sobriedade, fichas, reflexões)
 ├── SoPorHoje.Data/     # Camada de dados offline-first (SQLite)
-├── SoPorHoje.Api/      # API/back-end (opcional, em revisão de arquitetura)
-├── SoPorHoje.Scraper/  # Coletor de reuniões online
 └── SoPorHoje.Tests/    # Testes + auditoria de acessibilidade (WCAG)
 data/
 └── reflections/        # Reflexões diárias (conteúdo aberto, CC BY-SA)
+attic/                  # Código legado fora do build (servidor/scraper)
 ```
 
 ## Licença
