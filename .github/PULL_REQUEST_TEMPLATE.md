@@ -1,18 +1,17 @@
-## O que muda e por quê
+<!-- Titulo do PR = Conventional Commit (vira a mensagem do squash no trunk). -->
 
-<!-- Descreva a mudança e o motivo. Link para a issue relacionada, se houver. -->
+Closes #<N>
 
-## Tipo
+## O que muda
+<!-- Resumo objetivo da mudanca. -->
 
-- [ ] 💻 Código
-- [ ] 🌅 Conteúdo (reflexões / reuniões)
-- [ ] 📖 Documentação
-- [ ] 🔧 Outro
+## Tier
+<!-- baixo (chore/docs/test/fix-trivial -> auto-merge no verde) | alto (feat/refactor/migracao/auth/RLS -> aguarda label `aprovado`) -->
 
-## Checklist
+## Verificacao
+- [ ] build/test verdes localmente (/verify)
+- [ ] /code-review + pr-review-toolkit sem Critical
+- [ ] Aceite da issue #<N> todo marcado
 
-- [ ] `dotnet test src/SoPorHoje.Tests/SoPorHoje.Tests.csproj` passa localmente
-- [ ] Conteúdo segue [`data/reflections/SCHEMA.md`](../blob/main/data/reflections/SCHEMA.md) (se aplicável)
-- [ ] Sem material protegido de terceiros (A.A./N.A. ou outras obras)
-- [ ] Mudanças de UI preservam acessibilidade (`SemanticProperties`, toque ≥ 44px)
-- [ ] Commits assinados com `-s` (DCO sign-off)
+## Notas
+<!-- Racional de mudanca grande (fatiamento), gotchas, follow-ups. -->
